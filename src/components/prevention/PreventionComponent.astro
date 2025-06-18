@@ -29,6 +29,9 @@ const strategiList = [
     Berikut adalah beberapa langkah penting untuk membantu mengelola diabetes
     secara efektif dan berkelanjutan.
   </p>
+  <button id="notifTrigger" class="strategi-notif-btn">
+    Aktifkan Notifikasi Harian
+  </button>
 
   <div class="strategi-modern-list">
     {
@@ -124,6 +127,22 @@ const strategiList = [
     transform: translateY(30px);
     animation: fadeInUp 0.8s ease forwards;
   }
+  .strategi-notif-btn {
+    background-color: #2563eb;
+    color: #ffffff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    transition: background 0.3s;
+  }
+
+  .strategi-notif-btn:hover {
+    background-color: #1e40af;
+  }
 
   @keyframes fadeInUp {
     to {
@@ -150,3 +169,27 @@ const strategiList = [
     }
   }
 </style>
+
+<script>
+  if (typeof window !== "undefined") {
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("notifTrigger");
+
+      if (btn && "Notification" in window) {
+        btn.addEventListener("click", async (e) => {
+          e.preventDefault();
+          const permission = await Notification.requestPermission();
+
+          if (permission === "granted") {
+            new Notification("Notifikasi Aktif!", {
+              body: "Anda akan diingatkan untuk menjaga pola hidup sehat!",
+              icon: "/icons/notif-icon.png", // opsional
+            });
+          } else {
+            alert("Notifikasi tidak diizinkan.");
+          }
+        });
+      }
+    });
+  }
+</script>
