@@ -1,0 +1,297 @@
+---
+// Dependency Inversion Principle - Depends on abstractions (interfaces)
+import type { NavbarConfig, NavbarTheme } from '../types/NavbarInterfaces';
+import type { NavItem } from '../types/Nav';
+
+// Import sub-components (Single Responsibility Principle)
+import NavBrand from './navbar/NavBrand.astro';
+import DesktopMenu from './navbar/DesktopMenu.astro';
+import MobileMenu from './navbar/MobileMenu.astro';
+import HamburgerButton from './navbar/HamburgerButton.astro';
+
+interface Props {
+  brandName: string;
+  items: NavItem[];
+  className?: string;
+  config?: Partial<NavbarConfig>;
+  theme?: Partial<NavbarTheme>;
+  currentPath?: string;
+}
+
+// Default configuration (Open/Closed Principle - easy to extend)
+const defaultConfig: NavbarConfig = {
+  breakpoint: 768,
+  animationDuration: 300,
+  closeOnNavigate: true,
+  enableKeyboardNavigation: true
+};
+
+const defaultTheme: NavbarTheme = {
+  primaryColor: '#2563eb',
+  textColor: '#1e293b',
+  hoverColor: '#1d4ed8',
+  backgroundColor: '#ffffff',
+  transitionSpeed: '0.3s'
+};
+
+const {
+  brandName = "DiabetesInfo",
+  items = [],
+  className = "",
+  config = {},
+  theme = {},
+  currentPath = ""
+} = Astro.props;
+
+const finalConfig = { ...defaultConfig, ...config };
+const finalTheme = { ...defaultTheme, ...theme };
+---
+
+<nav
+  class={`navbar ${className}`}
+  data-navbar
+  style={`
+    --primary-color: ${finalTheme.primaryColor};
+    --text-color: ${finalTheme.textColor};
+    --hover-color: ${finalTheme.hoverColor};
+    --bg-color: ${finalTheme.backgroundColor};
+    --transition-speed: ${finalTheme.transitionSpeed};
+    --breakpoint: ${finalConfig.breakpoint}px;
+  `}
+>
+  <div class="navbar-container">
+    <!-- Brand Component -->
+    <NavBrand brandName={brandName} />
+
+    <!-- Desktop Menu Component -->
+    <DesktopMenu items={items} currentPath={currentPath} />
+
+    <!-- Mobile Hamburger Component -->
+    <HamburgerButton />
+  </div>
+
+  <!-- Mobile Menu Component -->
+  <MobileMenu items={items} currentPath={currentPath} />
+</nav>
+
+<style>
+  /* Base navbar styles using CSS custom properties */
+  .navbar {
+    background: var(--bg-color);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    position: relative;
+  }
+
+  /* Enhanced responsive design */
+  @media (max-width: 767px) {
+    .navbar-container {
+      padding: 1rem;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .navbar-container {
+      padding: 1rem 2rem;
+    }
+  }
+
+  /* Smooth transitions for all interactive elements */
+  .navbar * {
+    transition: all var(--transition-speed) ease-in-out;
+  }
+
+  /* Focus management for accessibility */
+  .navbar:focus-within {
+    outline: none;
+  }
+
+  /* Print styles */
+  @media print {
+    .navbar {
+      position: static;
+      box-shadow: none;
+      border-bottom: 1px solid #000;
+    }
+  }
+</style>
+<script>
+  // Functional approach to avoid TypeScript class property issues
+  function createNavbarController() {
+    // Configuration object
+    const config = {
+      breakpoint: parseInt(getComputedStyle(document.documentElement).getPropertyValue('--breakpoint')) || 768,
+      animationDuration: 300,
+      closeOnNavigate: true,
+      enableKeyboardNavigation: true
+    };
+
+    // State management
+    let isMenuOpen = false;
+    let resizeTimeout: ReturnType<typeof setTimeout> | undefined;
+
+    // Single Responsibility: Handle menu state
+    function toggleMenu() {
+      isMenuOpen = !isMenuOpen;
+      updateUI();
+    }
+
+    function closeMenu() {
+      if (isMenuOpen) {
+        isMenuOpen = false;
+        updateUI();
+      }
+    }
+
+    // Single Responsibility: Handle navigation
+    function handleNavigation(e: Event) {
+      const href = (e.currentTarget as HTMLElement)?.getAttribute('href');
+
+      if (href?.startsWith('#')) {
+        e.preventDefault();
+        scrollToSection(href);
+      }
+
+      if (config.closeOnNavigate && isMenuOpen) {
+        closeMenu();
+      }
+    }
+
+    // Single Responsibility: Smooth scroll to section
+    function scrollToSection(href: string) {
+      const targetId = href.substring(1);
+      const targetElement = document.getElementById(targetId);
+
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+
+        // Update URL hash without triggering page reload
+        history.pushState(null, '', href);
+      }
+    }
+
+    // Single Responsibility: Update UI based on state
+    function updateUI() {
+      const hamburger = document.getElementById('hamburger-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const overlay = document.getElementById('mobile-menu-overlay');
+
+      if (hamburger) {
+        hamburger.classList.toggle('active', isMenuOpen);
+        hamburger.setAttribute('aria-expanded', isMenuOpen.toString());
+      }
+
+      if (mobileMenu) {
+        mobileMenu.classList.toggle('active', isMenuOpen);
+      }
+
+      if (overlay) {
+        overlay.classList.toggle('active', isMenuOpen);
+      }
+
+      // Prevent body scroll when menu is open
+      document.body.style.overflow = isMenuOpen ? 'hidden' : '';
+
+      // Focus management
+      if (isMenuOpen) {
+        const firstLink = document.querySelector('[data-mobile-nav-link]') as HTMLElement;
+        if (firstLink && firstLink.focus) {
+          setTimeout(() => {
+            try {
+              firstLink.focus();
+            } catch (e) {
+              // Focus not available on this element
+            }
+          }, 100);
+        }
+      }
+    }
+
+    // Single Responsibility: Bind all events
+    function bindEvents() {
+      // Hamburger button
+      const hamburger = document.getElementById('hamburger-button');
+      hamburger?.addEventListener('click', toggleMenu);
+
+      // Mobile menu overlay
+      const overlay = document.getElementById('mobile-menu-overlay');
+      overlay?.addEventListener('click', (e) => {
+        if ((e.target as EventTarget) === overlay) {
+          closeMenu();
+        }
+      });
+
+      // Navigation links
+      document.querySelectorAll('[data-nav-link], [data-mobile-nav-link]').forEach(link => {
+        link.addEventListener('click', handleNavigation);
+      });
+    }
+
+    // Single Responsibility: Handle accessibility
+    function setupAccessibility() {
+      if (!config.enableKeyboardNavigation) return;
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isMenuOpen) {
+          closeMenu();
+        }
+      });
+    }
+
+    // Single Responsibility: Handle responsive behavior
+    function setupResponsiveHandling() {
+      window.addEventListener('resize', () => {
+        if (resizeTimeout) {
+          clearTimeout(resizeTimeout);
+        }
+        resizeTimeout = setTimeout(() => {
+          if (window.innerWidth >= config.breakpoint && isMenuOpen) {
+            closeMenu();
+          }
+        }, 100);
+      });
+    }
+
+    // Initialize all functionality
+    function init() {
+      bindEvents();
+      setupAccessibility();
+      setupResponsiveHandling();
+    }
+
+    // Public API
+    return {
+      init,
+      toggleMenu,
+      closeMenu,
+      destroy: () => {
+        document.body.style.overflow = '';
+        if (resizeTimeout) {
+          clearTimeout(resizeTimeout);
+        }
+      }
+    };
+  }
+
+  // Initialize when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    const navbarController = createNavbarController();
+    navbarController.init();
+  });
+</script>

@@ -1,0 +1,140 @@
+<section class="jenis-makanan-section">
+  <h2 class="section-title">
+    Jenis-Jenis Makanan untuk Penderita Diabetes Melitus
+  </h2>
+  <p class="section-subtitle">
+    Penting untuk mengetahui makanan yang membantu mengatur kadar gula darah dan
+    yang perlu dihindari.
+  </p>
+
+  <div class="makanan-grid">
+    <!-- Dianjurkan -->
+    <div class="makanan-card dianjurkan">
+      <img
+        src="/images/healthyfood.jpg"
+        alt="Makanan Sehat"
+        class="makanan-image"
+      />
+      <h3>Makanan yang Dianjurkan</h3>
+      <p class="desc">Makanan yang membantu mengontrol kadar gula darah:</p>
+      <ul>
+        <li>✅ Karbohidrat (Beras Merah, Oatmeal)</li>
+        <li>✅ Protein Hewani (Ikan, Putih Telur)</li>
+        <li>✅ Protein Nabati (Tempe, Tahu, Kacang Hijau)</li>
+        <li>✅ Sayuran (Daun Kacang, Mentimun, Tomat)</li>
+      </ul>
+    </div>
+
+    <!-- Tidak Dianjurkan -->
+    <div class="makanan-card tidak-dianjurkan">
+      <img
+        src="/images/unhealthyfood.jpg"
+        alt="Makanan Tidak Sehat"
+        class="makanan-image"
+      />
+      <h3>Makanan yang Tidak Dianjurkan</h3>
+      <p class="desc">
+        Makanan yang dapat meningkatkan kadar gula darah secara drastis:
+      </p>
+      <ul>
+        <li>❌ Mengandung Kolesterol (Jeroan, Otak)</li>
+        <li>❌ Makanan Cepat Saji (Junk Food)</li>
+        <li>❌ Makanan Manis (Gula, Madu, Sirup, Jelly, Kue)</li>
+        <li>❌ Mengandung Pengawet (Ikan Asin, Telur Asin)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .jenis-makanan-section {
+    padding: 4rem 1rem;
+    background: var(
+      --section-bg,
+      linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)
+    );
+    text-align: center;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e40af;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-subtitle {
+    color: #475569;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .makanan-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  .makanan-card {
+    background-color: white;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 400px;
+    text-align: left;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease;
+  }
+
+  .makanan-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .makanan-image {
+    width: 50%;
+    height: 30%;
+    object-fit: cover;
+    margin-bottom: 2rem;
+    display: block; /* Membuat elemen menjadi block untuk margin auto berfungsi */
+    margin-left: auto; /* Menengahkan secara horizontal */
+    margin-right: auto;
+  }
+
+  .makanan-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    color: #111827;
+  }
+
+  .makanan-card .desc {
+    font-size: 0.95rem;
+    color: #4b5563;
+    margin-bottom: 0.75rem;
+  }
+
+  .makanan-card ul {
+    list-style-type: none;
+  }
+
+  .makanan-card li {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: #374151;
+    position: relative;
+  }
+
+  .dianjurkan {
+    border-top: 6px solid #10b981;
+  }
+
+  .tidak-dianjurkan {
+    border-top: 6px solid #ef4444;
+  }
+
+  @media (max-width: 768px) {
+    .makanan-grid {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+</style>

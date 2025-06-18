@@ -1,0 +1,84 @@
+---
+// Single Responsibility: Only renders the hamburger menu button
+interface Props {
+  isActive?: boolean;
+  className?: string;
+  ariaLabel?: string;
+}
+
+const { 
+  isActive = false, 
+  className = "", 
+  ariaLabel = "Toggle navigation menu" 
+} = Astro.props;
+---
+
+<button 
+  class={`hamburger ${isActive ? 'active' : ''} ${className}`}
+  id="hamburger-button"
+  aria-label={ariaLabel}
+  aria-expanded={isActive}
+  aria-controls="mobile-menu"
+  type="button"
+>
+  <span class="hamburger-line" aria-hidden="true"></span>
+  <span class="hamburger-line" aria-hidden="true"></span>
+  <span class="hamburger-line" aria-hidden="true"></span>
+</button>
+
+<style>
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 24px;
+    width: 30px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+    z-index: 1001;
+    transition: transform var(--transition-speed, 0.3s);
+  }
+
+  .hamburger:hover {
+    transform: scale(1.1);
+  }
+
+  .hamburger:focus {
+    outline: 2px solid var(--primary-color, #2563eb);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  .hamburger-line {
+    height: 3px;
+    width: 100%;
+    background: var(--text-color, #1e293b);
+    transition: all var(--transition-speed, 0.3s);
+    border-radius: 2px;
+    transform-origin: center;
+  }
+
+  /* Active state animations */
+  .hamburger.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .hamburger.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  .hamburger.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+
+  /* Hide on desktop */
+  @media (min-width: 768px) {
+    .hamburger {
+      display: none;
+    }
+  }
+</style>

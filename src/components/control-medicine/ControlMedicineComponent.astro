@@ -1,0 +1,221 @@
+---
+
+---
+
+<section class="section-control">
+  <h2 class="title-control">Control Gula Darah dan Pengobatan Diabetes</h2>
+
+  <div class="control-section">
+    <h3 class="subtitle">Kontrol Gula Darah</h3>
+    <div class="table-wrapper">
+      <table class="control-table">
+        <thead>
+          <tr>
+            <th><img src="/images/bloodsugar.jpg" alt="" />Jenis Gula Darah</th>
+            <th
+              ><img src="/images/normal.png" alt="" />Rentang Gula Darah Normal</th
+            >
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Gula Darah Acak</td>
+            <td>90 – 200 mg/dL</td>
+          </tr>
+          <tr>
+            <td>Gula Darah Puasa</td>
+            <td>70 - 120 mg/dL</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="pengobatan-section">
+    <h3 class="subtitle">Pengobatan Diabetes</h3>
+    <div class="pengobatan-grid">
+      <div class="card-obat">
+        <h4>Obat Oral</h4>
+        <ul>
+          <li>
+            <strong>Metformin:</strong> Mengurangi produksi glukosa di hati dan meningkatkan
+            sensitivitas insulin.
+          </li>
+          <li>
+            <strong>Sulfonilurea:</strong> Merangsang pankreas untuk memproduksi
+            lebih banyak insulin.
+          </li>
+          <li>
+            <strong>Inhibitor DPP-4:</strong> Membantu meningkatkan kadar insulin
+            dan menurunkan kadar glukosa.
+          </li>
+          <li>
+            <strong>Thiazolidinediones:</strong> Meningkatkan sensitivitas sel terhadap
+            insulin.
+          </li>
+          <li>
+            <strong>Inhibitor SGLT2:</strong> Mengurangi penyerapan kembali glukosa
+            di ginjal.
+          </li>
+        </ul>
+      </div>
+      <div class="card-obat">
+        <h4>Terapi Insulin</h4>
+        <ul>
+          <li>
+            <strong>Insulin kerja pendek/cepat:</strong> Digunakan sesaat sebelum
+            makan, bekerja 4–8 jam.
+          </li>
+          <li>
+            <strong>Insulin kerja menengah:</strong> Meniru sekresi insulin basal,
+            bekerja 8–12 jam.
+          </li>
+          <li>
+            <strong>Insulin kerja panjang:</strong> Digunakan 1–2x sehari, bekerja
+            12–24 jam.
+          </li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">
+      <em>* Penggunaan obat harus sesuai dengan anjuran dokter.</em>
+    </p>
+  </div>
+</section>
+
+<style>
+  .section-control {
+    background-color: #f0f4f8;
+    padding: 4rem 2rem;
+    font-family: "Segoe UI", sans-serif;
+  }
+
+  .title-control {
+    text-align: center;
+    color: #2563eb;
+    font-size: 2.3rem;
+    font-weight: bold;
+    margin-bottom: 2.5rem;
+  }
+
+  .subtitle {
+    font-size: 1.4rem;
+    color: #1e293b;
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
+    border-left: 4px solid #2563eb;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .control-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .control-table th,
+  .control-table td {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 1rem;
+  }
+
+  .control-table th {
+    background-color: #2563eb;
+    color: white;
+    font-weight: 600;
+  }
+
+  .control-table th img {
+    width: 18px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  .pengobatan-section {
+    margin-top: 3rem;
+  }
+
+  .pengobatan-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 1.5rem;
+  }
+
+  .card-obat {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+    transition: 0.3s ease;
+  }
+
+  .card-obat:hover {
+    transform: translateY(-6px);
+  }
+
+  .card-obat h4 {
+    color: #2563eb;
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .card-obat ul {
+    padding-left: 1.2rem;
+    color: #334155;
+    line-height: 1.6;
+  }
+
+  .card-obat strong {
+    color: #1f2937;
+  }
+
+  .note {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: #dc2626;
+    text-align: center;
+  }
+
+  /* Responsif */
+  @media (max-width: 768px) {
+    .pengobatan-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .title-control {
+      font-size: 1.9rem;
+    }
+
+    .control-table th,
+    .control-table td {
+      padding: 0.6rem 0.8rem;
+      font-size: 0.85rem;
+      word-wrap: break-word;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+    }
+
+    .card-obat {
+      padding: 1.2rem 1.5rem;
+    }
+
+    .card-obat h4 {
+      font-size: 1.05rem;
+    }
+
+    .card-obat ul {
+      font-size: 0.95rem;
+    }
+  }
+</style>

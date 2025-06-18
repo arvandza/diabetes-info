@@ -1,0 +1,453 @@
+---
+// Single Responsibility: Only handles the grid layout for diabetes type cards
+import DiabetesTypeCard from "./DiabetesTypeCard.astro";
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  className?: string;
+  layout?: "grid" | "masonry" | "carousel";
+  columns?: number;
+}
+
+const {
+  title = "Types of Diabetes Mellitus",
+  subtitle = "Understanding Different Forms",
+  description = "Diabetes mellitus encompasses several distinct conditions, each with unique characteristics, causes, and treatment approaches.",
+  className = "",
+  layout = "grid",
+  columns = 2,
+} = Astro.props;
+
+// Comprehensive diabetes types data
+const diabetesTypes = [
+  {
+    type: "Diabetes Tipe 1",
+    title: "Diabetes Tipe 1",
+    description:
+      "Kondisi autoimun di mana pankreas menghasilkan sedikit atau tidak sama sekali insulin karena penghancuran sel beta penghasil insulin oleh sistem kekebalan tubuh.",
+    characteristics: [
+      "Memerlukan terapi insulin seumur hidup untuk bertahan hidup",
+      "Mencakup 5-10% dari semua kasus diabetes di seluruh dunia",
+      "Sering berkembang dengan cepat dengan gejala parah (minggu hingga bulan)",
+    ],
+    prevalence: "5-10%",
+    ageGroup: "Anak-anak & Dewasa Muda",
+    treatment: [
+      "Suntikan insulin harian atau terapi pompa insulin",
+      "Pemantauan glukosa darah secara terus-menerus (CGM)",
+      "Penghitungan karbohidrat dan perencanaan makan",
+      "Aktivitas fisik dan olahraga rutin",
+      "Pemantauan keton dan pencegahan ketoasidosis diabetik",
+    ],
+    icon: "💉",
+    color: "#dc2626",
+    image: "/images/type1-diabetes.jpg",
+  },
+  {
+    type: "Diabetes Tipe 2",
+    title: "Diabetes Tipe 2",
+    description:
+      "Bentuk diabetes yang paling umum, ditandai dengan resistensi insulin dan kekurangan insulin relatif.",
+    characteristics: [
+      "Resistensi insulin pada sel otot, lemak, dan hati",
+      "Penurunan fungsi pankreas secara bertahap",
+      "Sering dikaitkan dengan obesitas dan faktor gaya hidup",
+      "Biasanya berkembang secara bertahap selama bertahun-tahun",
+      "Seringkali dapat dicegah atau ditunda",
+    ],
+    prevalence: "90-95%",
+    ageGroup: "Dewasa 45+",
+    treatment: [
+      "Modifikasi gaya hidup (diet dan olahraga)",
+      "Obat oral (metformin, dll.)",
+      "Obat suntik (agonis GLP-1)",
+      "Terapi insulin (jika diperlukan)",
+      "Pemantauan glukosa darah rutin",
+    ],
+    icon: "🍎",
+    color: "#2563eb",
+    image: "/images/type2-diabetes.jpg",
+  },
+  {
+    type: "Diabetes Gestasional",
+    title: "Diabetes Gestasional",
+    description:
+      "Gula darah tinggi yang berkembang selama kehamilan dan biasanya hilang setelah melahirkan, tetapi meningkatkan risiko diabetes di masa depan.",
+    characteristics: [
+      "Berkembang selama kehamilan (biasanya trimester kedua atau ketiga)",
+      "Disebabkan oleh perubahan hormonal yang memengaruhi aksi insulin",
+      "Biasanya hilang setelah melahirkan",
+      "Meningkatkan risiko diabetes tipe 2 di kemudian hari",
+      "Dapat memengaruhi kesehatan bayi jika tidak terkontrol",
+    ],
+    prevalence: "2-10%",
+    ageGroup: "Wanita Hamil",
+    treatment: [
+      "Diet sehat untuk kehamilan",
+      "Aktivitas fisik rutin",
+      "Pemantauan glukosa darah",
+      "Terapi insulin jika diperlukan",
+      "Pemeriksaan diabetes pasca melahirkan",
+    ],
+    icon: "🤱",
+    color: "#7c3aed",
+    image: "/images/gestational-diabetes.jpg",
+  },
+  {
+    type: "Prediabetes",
+    title: "Prediabetes",
+    description:
+      "Kondisi di mana kadar gula darah lebih tinggi dari normal tetapi belum cukup tinggi untuk diklasifikasikan sebagai diabetes tipe 2.",
+    characteristics: [
+      "Kadar glukosa darah di atas normal tetapi di bawah ambang diabetes",
+      "Seringkali tidak menunjukkan gejala",
+      "Risiko tinggi berkembang menjadi diabetes tipe 2",
+      "Dapat dibalik dengan perubahan gaya hidup",
+      "Mempengaruhi 1 dari 3 orang dewasa di AS",
+    ],
+    prevalence: "33%",
+    ageGroup: "Dewasa 35+",
+    treatment: [
+      "Penurunan berat badan (5-7% dari berat tubuh)",
+      "Aktivitas fisik rutin (150 menit/minggu)",
+      "Diet sehat dengan pengurangan karbohidrat olahan",
+      "Pemantauan dan pemeriksaan rutin",
+      "Program pencegahan diabetes",
+    ],
+    icon: "⚠️",
+    color: "#f59e0b",
+    image: "/images/prediabetes.jpg",
+  },
+  {
+    type: "MODY",
+    title: "MODY",
+    description:
+      "Bentuk diabetes langka yang disebabkan oleh mutasi genetik yang memengaruhi produksi insulin, biasanya didiagnosis sebelum usia 25 tahun.",
+    characteristics: [
+      "Disebabkan oleh mutasi gen tunggal",
+      "Memiliki riwayat keluarga yang kuat (dominan autosomal)",
+      "Biasanya didiagnosis sebelum usia 25 tahun",
+      "Sering salah didiagnosis sebagai tipe 1 atau tipe 2",
+      "Memiliki beberapa subtipe dengan karakteristik berbeda",
+    ],
+    prevalence: "1-2%",
+    ageGroup: "Anak-anak & Dewasa Muda",
+    treatment: [
+      "Tergantung pada jenis MODY tertentu",
+      "Mungkin memerlukan insulin atau obat oral",
+      "Konseling genetik untuk keluarga",
+      "Pemantauan dan pemeriksaan rutin",
+      "Modifikasi gaya hidup",
+    ],
+    icon: "🧬",
+    color: "#059669",
+    image: "/images/mody-diabetes.jpg",
+  },
+  {
+    type: "Diabetes Sekunder",
+    title: "Diabetes Sekunder",
+    description:
+      "Diabetes yang berkembang akibat kondisi medis lain atau pengobatan yang memengaruhi pankreas atau aksi insulin.",
+    characteristics: [
+      "Disebabkan oleh kondisi medis lain",
+      "Dapat diakibatkan oleh obat-obatan atau perawatan",
+      "Penyakit pankreas (pankreatitis, kanker)",
+      "Gangguan hormonal (sindrom Cushing)",
+      "Dapat dibalik jika penyebab utama diobati",
+    ],
+    prevalence: "1-5%",
+    ageGroup: "Segala Usia",
+    treatment: [
+      "Mengobati kondisi medis yang mendasarinya",
+      "Menyesuaikan obat-obatan yang menyebabkan diabetes",
+      "Pengelolaan glukosa darah",
+      "Insulin atau obat oral sesuai kebutuhan",
+      "Pemantauan dan tindak lanjut rutin",
+    ],
+    icon: "🏥",
+    color: "#6366f1",
+    image: "/images/secondary-diabetes.jpg",
+  },
+];
+---
+
+<section class={`diabetes-types-section ${className}`} data-diabetes-types>
+  <!-- Section Header -->
+  <div class="section-header">
+    <div class="header-content">
+      {subtitle && <p class="section-subtitle">{subtitle}</p>}
+      <h2 class="section-title">{title}</h2>
+      {description && <p class="section-description">{description}</p>}
+    </div>
+  </div>
+
+  <!-- Types Grid -->
+  <div
+    class={`types-grid types-grid--${layout}`}
+    style={`--grid-columns: ${columns}`}
+  >
+    {
+      diabetesTypes.map((diabetesType) => (
+        <DiabetesTypeCard
+          type={diabetesType.type}
+          title={diabetesType.title}
+          description={diabetesType.description}
+          characteristics={diabetesType.characteristics}
+          causes={diabetesType.causes}
+          prevalence={diabetesType.prevalence}
+          ageGroup={diabetesType.ageGroup}
+          treatment={diabetesType.treatment}
+          icon={diabetesType.icon}
+          color={diabetesType.color}
+          image={diabetesType.image}
+        />
+      ))
+    }
+  </div>
+
+  <!-- Additional Information -->
+  <div class="section-footer">
+    <div class="footer-content">
+      <p class="footer-note">
+        <strong>Important:</strong> This information is for educational purposes
+        only. Always consult with healthcare professionals for proper diagnosis and
+        treatment.
+      </p>
+      <div class="footer-actions">
+        <button class="consultation-btn">
+          Schedule Consultation
+          <span class="btn-icon" aria-hidden="true">📅</span>
+        </button>
+        <button class="resources-btn">
+          Download Resources
+          <span class="btn-icon" aria-hidden="true">📄</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .diabetes-types-section {
+    padding: var(--section-padding, 4rem 0);
+    position: relative;
+    max-width: var(
+      --section-max-width,
+      1200px
+    ); /* Ensure section has a max-width */
+    margin: 0 auto; /* Center the entire section */
+  }
+
+  /* Section Header */
+  .section-header {
+    max-width: var(--section-max-width, 1200px);
+    margin: 0 auto;
+    padding: 0 var(--section-padding-x, 1.5rem);
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .header-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .section-subtitle {
+    color: var(--primary-color, #2563eb);
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .section-title {
+    color: var(--title-color, #1e293b);
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 0 1rem 0;
+  }
+
+  .section-description {
+    color: var(--text-color, #4a5568);
+    font-size: 1.125rem;
+    line-height: 1.6; /* Fixed typo from '1' to '1.6' for consistency */
+    margin: 0;
+  }
+
+  /* Types Grid */
+  .types-grid {
+    max-width: var(--section-max-width, 1200px); /* Match section max-width */
+    margin: 0 auto; /* Center the grid horizontally */
+    padding: 0 var(--section-padding-x, 1.5rem);
+    display: grid;
+    gap: var(--grid-gap, 2rem);
+    justify-content: center; /* Center grid items within the grid */
+  }
+
+  .types-grid--grid {
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(350px, 1fr)
+    ); /* Flexible columns */
+  }
+
+  .types-grid--masonry {
+    grid-template-columns: repeat(var(--grid-columns, 2), 1fr);
+    grid-auto-rows: minmax(200px, auto); /* Adjusted for masonry layout */
+  }
+
+  /* Section Footer */
+  .section-footer {
+    max-width: var(--section-max-width, 1200px);
+    margin: 3rem auto 0;
+    padding: 0 var(--section-padding-x, 1.5rem);
+  }
+
+  .footer-content {
+    background: var(--footer-bg, #ffffff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .footer-note {
+    color: var(--text-color, #4a5568);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0 0 1.5rem 0;
+  }
+
+  .footer-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .consultation-btn,
+  .resources-btn {
+    background: var(--primary-color, #2563eb);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .resources-btn {
+    background: var(--secondary-color, #6b7280);
+  }
+
+  .consultation-btn:hover {
+    background: var(--primary-color-dark, #1d4ed8);
+    transform: translateY(-1px);
+  }
+
+  .resources-btn:hover {
+    background: var(--secondary-color-dark, #4b5563);
+    transform: translateY(-1px);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .diabetes-types-section {
+      padding: var(--section-padding-mobile, 2rem 0);
+    }
+
+    .section-header {
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .section-description {
+      font-size: 1rem;
+    }
+
+    .types-grid {
+      grid-template-columns: 1fr; /* Single column for mobile */
+      gap: var(--grid-gap-mobile, 1.5rem);
+      justify-content: center; /* Ensure centering on mobile */
+    }
+
+    .footer-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .consultation-btn,
+    .resources-btn {
+      width: 100%;
+      max-width: 250px;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .types-grid--grid {
+      grid-template-columns: repeat(2, 1fr);
+      justify-content: center; /* Center items in tablet view */
+    }
+  }
+
+  @media (min-width: 1025px) {
+    .section-title {
+      font-size: 3rem;
+    }
+
+    .types-grid--grid {
+      grid-template-columns: repeat(3, 1fr); /* Three columns for desktop */
+      justify-content: center; /* Center items */
+    }
+  }
+
+  /* Accessibility */
+  .consultation-btn:focus,
+  .resources-btn:focus {
+    outline: 2px solid var(--primary-color, #2563eb);
+    outline-offset: 2px;
+  }
+
+  /* High contrast mode */
+  @media (prefers-contrast: high) {
+    .footer-content {
+      border-width: 2px;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .consultation-btn,
+    .resources-btn {
+      transition: none;
+    }
+
+    .consultation-btn:hover,
+    .resources-btn:hover {
+      transform: none;
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    .diabetes-types-section {
+      background: #ffffff !important;
+    }
+
+    .footer-actions {
+      display: none;
+    }
+  }
+</style>

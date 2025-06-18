@@ -1,0 +1,203 @@
+---
+// Single Responsibility: Only handles hero background rendering
+interface Props {
+  image?: string;
+  overlay?: boolean;
+  overlayOpacity?: number;
+  position?: string;
+  size?: string;
+  className?: string;
+  alt?: string;
+}
+
+const {
+  image,
+  overlay = true,
+  overlayOpacity = 0.4,
+  position = 'center',
+  size = 'cover',
+  className = "",
+  alt = "Hero background"
+} = Astro.props;
+---
+
+<div class={`hero-background ${className}`} data-hero-background>
+  {image && (
+    <img
+      src={image}
+      alt={alt}
+      class="hero-background-image"
+      loading="eager"
+      decoding="async"
+      data-hero-image
+    />
+  )}
+
+  {overlay && (
+    <div
+      class="hero-background-overlay"
+      data-hero-overlay
+      style={`opacity: ${overlayOpacity}`}
+    ></div>
+  )}
+</div>
+
+<style>
+  .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .hero-background-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform var(--hero-transition, 0.3s ease);
+    will-change: transform;
+  }
+
+  .hero-background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--hero-overlay-color, linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(59, 130, 246, 0.6)));
+    z-index: 2;
+    transition: opacity var(--hero-transition, 0.3s ease);
+  }
+
+  /* Responsive background positioning */
+  @media (max-width: 768px) {
+    .hero-background-image {
+      object-position: center top;
+    }
+  }
+
+  /* Parallax effect on larger screens - DISABLED FOR DEBUGGING */
+  @media (min-width: 1024px) {
+    .hero-background-image {
+      /* transform: scale(1.1); */
+    }
+
+    .hero-background:hover .hero-background-image {
+      /* transform: scale(1.05); */
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .hero-background-overlay {
+      background: rgba(0, 0, 0, 0.8);
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-background-image {
+      transition: none;
+      transform: none !important;
+    }
+
+    .hero-background-overlay {
+      transition: none;
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    .hero-background {
+      position: static;
+      height: auto;
+    }
+
+    .hero-background-overlay {
+      display: none;
+    }
+
+    .hero-background-image {
+      opacity: 0.3;
+    }
+  }
+
+  /* Focus management for accessibility */
+  .hero-background:focus-within {
+    outline: 2px solid var(--hero-focus-color, #2563eb);
+    outline-offset: 2px;
+  }
+
+  /* Loading state */
+  .hero-background-image[data-loading="true"] {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .hero-background-image[data-loaded="true"] {
+    opacity: 1;
+  }
+
+  /* Error state */
+  .hero-background[data-error="true"] {
+    background: var(--hero-fallback-bg, linear-gradient(135deg, #f3f4f6, #e5e7eb));
+  }
+
+  .hero-background[data-error="true"]::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 64px;
+    height: 64px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' /%3E%3C/svg%3E") no-repeat center;
+    background-size: contain;
+    opacity: 0.3;
+    z-index: 3;
+  }
+</style>
+
+<script>
+  // Image loading and error handling
+  function initializeHeroBackground() {
+    const backgroundElement = document.querySelector('[data-hero-background]') as HTMLElement;
+    const imageElement = document.querySelector('[data-hero-image]') as HTMLImageElement;
+
+    if (!backgroundElement || !imageElement) return;
+
+    // Set loading state
+    imageElement.setAttribute('data-loading', 'true');
+
+    // Handle image load
+    imageElement.addEventListener('load', () => {
+      console.log('✅ Hero background image loaded successfully:', imageElement.src);
+      imageElement.setAttribute('data-loaded', 'true');
+      imageElement.removeAttribute('data-loading');
+    });
+
+    // Handle image error
+    imageElement.addEventListener('error', () => {
+      console.error('❌ Hero background image failed to load:', imageElement.src);
+      backgroundElement.setAttribute('data-error', 'true');
+      imageElement.removeAttribute('data-loading');
+    });
+
+    // Preload image if not already loaded
+    if (!imageElement.complete) {
+      const preloadImage = new Image();
+      preloadImage.src = imageElement.src;
+    }
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeHeroBackground);
+  } else {
+    initializeHeroBackground();
+  }
+</script>

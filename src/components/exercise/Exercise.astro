@@ -1,0 +1,351 @@
+---
+const steps = [
+  {
+    step: "1",
+    title: "Duduk Tegak di Kursi",
+    description:
+      "Duduk dengan posisi tegak di kursi, pastikan kedua kaki menyentuh lantai dengan nyaman. Posisi ini membantu menjaga keseimbangan dan mempersiapkan kaki untuk gerakan selanjutnya.",
+    image: "/images/1.JPG",
+  },
+  {
+    step: "2",
+    title: "Gerakan Jari Kaki",
+    description:
+      "Letakkan tumit di lantai, lalu angkat dan luruskan jari-jari kaki ke atas, kemudian tekuk ke bawah seperti cakar sebanyak 10 kali. Latihan ini meningkatkan fleksibilitas jari kaki.",
+    image: "/images/2.JPG",
+  },
+  {
+    step: "3",
+    title: "Angkat Tumit dan Telapak",
+    description:
+      "Angkat telapak kaki kanan dengan tumit di lantai, lalu ganti dengan mengangkat tumit kiri sambil menempelkan jari kaki. Ulangi bergantian 10 kali untuk melancarkan sirkulasi.",
+    image: "/images/3.JPG",
+  },
+  {
+    step: "4",
+    title: "Putar Ujung Kaki",
+    description:
+      "Dengan tumit di lantai, angkat ujung jari kaki ke atas dan putar pergelangan kaki searah dan berlawanan jarum jam sebanyak 10 kali. Gerakan ini memperkuat pergelangan kaki.",
+    image: "/images/4.JPG",
+  },
+  {
+    step: "5",
+    title: "Putar Tumit Kaki",
+    description:
+      "Tempelkan jari-jari kaki di lantai, angkat tumit, lalu putar pergelangan kaki sebanyak 10 kali. Latihan ini membantu merelaksasi otot kaki dan meningkatkan aliran darah.",
+    image: "/images/5.JPG",
+  },
+  {
+    step: "6",
+    title: "Menulis Angka di Udara",
+    description:
+      "Luruskan dan angkat satu kaki, lalu putar pergelangan kaki seolah menulis angka 0-10 di udara. Lakukan bergantian untuk melatih koordinasi dan kekuatan kaki.",
+    image: "/images/6.jpg",
+  },
+  {
+    step: "7",
+    title: "Mainkan Koran dengan Kaki",
+    description:
+      "Gunakan kaki untuk membentuk koran menjadi bola, buka kembali, lalu sobek menjadi potongan kecil. Gerakan ini dilakukan sekali untuk melatih kekuatan dan ketangkasan kaki.",
+    image: "/images/7.jpg",
+  },
+];
+
+const row1 = steps.slice(0, 4);
+const row2 = steps.slice(4);
+---
+
+<div class="senam-section">
+  <p class="subtitle">AYO MULAI</p>
+  <h2 class="main-title">Panduan Senam Kaki Diabetes</h2>
+  <p class="description">
+    Ikuti langkah-langkah senam kaki ini di rumah untuk meningkatkan sirkulasi
+    darah, mencegah neuropati, dan menjaga kesehatan kaki Anda.
+  </p>
+
+  <!-- Baris 1 -->
+  <div class="card-grid-row row-4">
+    {
+      row1.map((step) => (
+        <div class="card">
+          <span class="step-circle">{step.step}</span>
+          <img src={step.image} alt={step.title} class="card-img" />
+          <div class="card-content">
+            <h3 class="card-title">{step.title}</h3>
+            <p class="card-desc">{step.description}</p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <!-- Baris 2 (dengan center alignment) -->
+  <div class="card-grid-row row-3-centered">
+    {
+      row2.map((step) => (
+        <div class="card">
+          <span class="step-circle">{step.step}</span>
+          <img src={step.image} alt={step.title} class="card-img" />
+          <div class="card-content">
+            <h3 class="card-title">{step.title}</h3>
+            <p class="card-desc">{step.description}</p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <!-- Video -->
+  <div class="video-section">
+    <a href="https://youtu.be/hBmyE9ntrvc" class="video-card">
+      <div class="video-thumbnail-wrapper">
+        <img
+          src="https://i.ytimg.com/vi/hBmyE9ntrvc/maxresdefault.jpg"
+          alt="Video Senam Kaki"
+          class="video-thumbnail"
+        />
+        <span class="video-play-icon">▶</span>
+      </div>
+      <div class="video-text">
+        <h3>Tonton Panduan Video Senam Kaki</h3>
+        <p>
+          Ikuti gerakan senam kaki dengan mudah melalui video panduan ini, cocok
+          untuk penderita diabetes.
+        </p>
+      </div>
+    </a>
+  </div>
+</div>
+
+<style>
+  .senam-section {
+    padding: 4rem 2rem;
+    background: var(
+      --section-bg,
+      linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)
+    );
+    text-align: center;
+  }
+
+  .subtitle {
+    text-transform: uppercase;
+    color: #3b82f6;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 0.75rem;
+  }
+
+  .main-title {
+    font-size: 2.75rem;
+    font-weight: 900;
+    color: #1e40af;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .description {
+    max-width: 800px;
+    margin: 1.5rem auto 3rem;
+    font-size: 1.125rem;
+    color: #4b5563;
+    line-height: 1.7;
+  }
+
+  .card-grid-row {
+    display: grid;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+
+  /* Baris 1: 4 kolom */
+  .row-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Baris 2: 3 kolom, dipusatkan */
+  .row-3-centered {
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+  }
+
+  /* Kartu */
+  .card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+    text-align: left;
+    position: relative;
+  }
+
+  .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .step-circle {
+    position: absolute;
+    top: 1.25rem;
+    left: 1rem;
+    background: #3b82f6;
+    color: #ffffff;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    border-bottom: 2px solid #e5e7eb;
+  }
+
+  .card-content {
+    padding: 1.5rem;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    color: #1d4ed8;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+  }
+
+  .card-desc {
+    color: #6b7280;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  /* Video */
+  .video-section {
+    margin-top: 4rem;
+  }
+
+  .video-card {
+    display: flex;
+    max-width: 720px;
+    margin: 0 auto;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+    background-color: #fff;
+  }
+
+  .video-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  }
+
+  .video-thumbnail-wrapper {
+    position: relative;
+    flex: 1;
+  }
+
+  .video-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .video-play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5rem;
+    color: #ffffff;
+    background: rgba(59, 130, 246, 0.7);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+  }
+
+  .video-card:hover .video-play-icon {
+    background: rgba(59, 130, 246, 0.9);
+  }
+
+  .video-text {
+    flex: 1;
+    padding: 1.5rem;
+    background: #f9fafb;
+  }
+
+  .video-text h3 {
+    font-size: 1.3rem;
+    color: #1d4ed8;
+    margin-bottom: 0.5rem;
+  }
+
+  .video-text p {
+    font-size: 1rem;
+    color: #6b7280;
+    line-height: 1.6;
+  }
+
+  /* Responsif */
+  @media (max-width: 1200px) {
+    .row-4 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .row-4,
+    .row-3-centered {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .main-title {
+      font-size: 2.25rem;
+    }
+
+    .video-card {
+      flex-direction: column;
+    }
+
+    .video-thumbnail-wrapper {
+      height: 200px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .row-4,
+    .row-3-centered {
+      grid-template-columns: 1fr;
+    }
+
+    .main-title {
+      font-size: 1.8rem;
+    }
+
+    .description {
+      font-size: 1rem;
+    }
+
+    .card-img {
+      height: 160px;
+    }
+  }
+</style>

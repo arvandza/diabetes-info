@@ -1,0 +1,362 @@
+---
+// Single Responsibility: Only handles definition content rendering
+interface Props {
+  title: string;
+  subtitle?: string;
+  definition: string;
+  keyPoints?: string[];
+  statistics?: Array<{
+    label: string;
+    value: string;
+    description?: string;
+  }>;
+  className?: string;
+}
+
+const {
+  title,
+  subtitle,
+  definition,
+  keyPoints = [],
+  statistics = [],
+  className = "",
+} = Astro.props;
+---
+
+<div class={`definition-content ${className}`} data-definition-content>
+  <div class="definition-header">
+    {subtitle && <p class="definition-subtitle">{subtitle}</p>}
+    <h2 class="definition-title">{title}</h2>
+  </div>
+
+  <div class="definition-body">
+    <p class="definition-text">{definition}</p>
+
+    {
+      keyPoints.length > 0 && (
+        <div class="key-points">
+          <h3 class="key-points-title">Tipe Diabetes Mellitus:</h3>
+          <ul class="key-points-list">
+            {keyPoints.map((point) => (
+              <li class="key-point-item">
+                <span class="key-point-icon" aria-hidden="true">
+                  ✓
+                </span>
+                <span class="key-point-text">{point}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+
+    {
+      statistics.length > 0 && (
+        <div class="statistics">
+          <h3 class="statistics-title">Statistik:</h3>
+          <div class="statistics-grid">
+            {statistics.map((stat, index) => (
+              <div class="statistic-card" data-stat-id={`stat-${index}`}>
+                <div class="statistic-value">
+                  <span
+                    id={`stat-value-${index}`}
+                    data-value={stat.value}
+                    aria-label={`Nilai statistik ${stat.label}: ${stat.value}`}
+                  >
+                    0
+                  </span>
+                </div>
+                <div class="statistic-label">{stat.label}</div>
+                {stat.description && (
+                  <div class="statistic-description">{stat.description}</div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    }
+  </div>
+</div>
+
+<script>
+  // Fungsi untuk mem-parsing nilai statistik
+  function parseStatValue(value) {
+    const match = value.match(/^([\d,.]+)\s*(Juta|Miliar|%)$/);
+    if (!match)
+      return { number: parseFloat(value.replace(",", ".")), suffix: "" };
+    return {
+      number: parseFloat(match[1].replace(",", ".")),
+      suffix: match[2],
+    };
+  }
+
+  // Fungsi untuk memformat angka kembali ke format asli
+  function formatStatValue(number, suffix) {
+    if (suffix === "%") return `${number.toFixed(1).replace(".", ",")}%`;
+    if (suffix === "Juta" || suffix === "Miliar") {
+      return `${number.toFixed(suffix === "Juta" ? 0 : 1).replace(".", ",")} ${suffix}`;
+    }
+    return number.toString();
+  }
+
+  // Fungsi animasi count-up
+  function animateCountUp(element, target, suffix, duration) {
+    const start = 0;
+    const startTime = performance.now();
+
+    function update(time) {
+      const elapsed = time - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const current = start + (target - start) * progress;
+      element.textContent = formatStatValue(current, suffix);
+
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      }
+    }
+
+    requestAnimationFrame(update);
+  }
+
+  // Cek prefers-reduced-motion
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  // Inisialisasi IntersectionObserver
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const statCard = entry.target;
+          const index = statCard.dataset.statId.replace("stat-", "");
+          const valueElement = document.getElementById(`stat-value-${index}`);
+          const value = valueElement.dataset.value;
+          const { number, suffix } = parseStatValue(value);
+
+          if (!prefersReducedMotion) {
+            animateCountUp(valueElement, number, suffix, 2000); // Durasi 2 detik
+          } else {
+            valueElement.textContent = value; // Tampilkan nilai langsung tanpa animasi
+          }
+
+          observer.unobserve(statCard); // Hentikan observasi setelah animasi selesai
+        }
+      });
+    },
+    { threshold: 0.5 } // Animasi mulai saat 50% elemen terlihat
+  );
+
+  // Amati semua kartu statistik
+  document.querySelectorAll(".statistic-card").forEach((card) => {
+    observer.observe(card);
+  });
+</script>
+
+<style>
+  .definition-content {
+    flex: 1;
+    padding: var(--definition-content-padding, 2rem);
+  }
+
+  .definition-header {
+    margin-bottom: 2rem;
+  }
+
+  .definition-subtitle {
+    color: var(--definition-primary-color, #f1f1f1); /* Abu-abu sangat terang */
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .definition-title {
+    color: var(--definition-title-color, #1e293b);
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 0 1rem 0;
+  }
+
+  .definition-text {
+    color: var(--definition-text-color, #4a5568);
+    font-size: 1.125rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  /* Key Points */
+  .key-points {
+    margin-bottom: 2rem;
+  }
+
+  .key-points-title {
+    color: var(--definition-title-color, #1e293b);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .key-points-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .key-point-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    background: var(--definition-key-point-bg, #f8fafc);
+    border-radius: 8px;
+    border-left: 4px solid var(--definition-primary-color, #2563eb);
+  }
+
+  .key-point-icon {
+    color: var(--definition-primary-color, #2563eb);
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-top: 0.1rem;
+    flex-shrink: 0;
+  }
+
+  .key-point-text {
+    color: var(--definition-text-color, #4a5568);
+    line-height: 1.6;
+  }
+
+  /* Statistics */
+  .statistics {
+    margin-top: 2rem;
+  }
+
+  .statistics-title {
+    color: var(--definition-title-color, #1e293b);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .statistics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .statistic-card {
+    background: var(--definition-card-bg, #ffffff);
+    border: 1px solid var(--definition-border-color, #e2e8f0);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .statistic-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.1);
+  }
+
+  .statistic-value {
+    color: var(--definition-primary-color, #2563eb);
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .statistic-label {
+    color: var(--definition-title-color, #1e293b);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+  }
+
+  .statistic-description {
+    color: var(--definition-text-color, #4a5568);
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .definition-content {
+      padding: var(--definition-content-padding-mobile, 1.5rem);
+    }
+
+    .definition-title {
+      font-size: 2rem;
+    }
+
+    .definition-text {
+      font-size: 1rem;
+    }
+
+    .statistics-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .statistic-value {
+      font-size: 1.75rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .definition-content {
+      padding: var(--definition-content-padding-desktop, 3rem);
+    }
+
+    .definition-title {
+      font-size: 3rem;
+    }
+  }
+
+  /* Accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .statistic-card {
+      transition: none;
+    }
+
+    .statistic-card:hover {
+      transform: none;
+    }
+
+    /* Pastikan animasi count-up tidak berjalan */
+    .statistic-value span {
+      transition: none !important;
+    }
+  }
+
+  /* High contrast mode */
+  @media (prefers-contrast: high) {
+    .key-point-item {
+      border-left-width: 6px;
+    }
+
+    .statistic-card {
+      border-width: 2px;
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    .definition-content {
+      padding: 0;
+    }
+
+    .statistic-card {
+      break-inside: avoid;
+      box-shadow: none;
+      border: 2px solid #000;
+    }
+  }
+</style>

@@ -1,0 +1,152 @@
+---
+const strategiList = [
+  {
+    icon: "/images/diet.png",
+    title: "Diet Sehat",
+    description:
+      "Fokus pada biji-bijian utuh, protein rendah lemak, buah-buahan, dan sayuran. Batasi makanan olahan dan minuman manis.",
+  },
+  {
+    icon: "/images/exercise.png",
+    title: "Olahraga Teratur",
+    description:
+      "Targetkan setidaknya 150 menit aktivitas aerobik intensitas sedang per minggu.",
+  },
+  {
+    icon: "/images/weight.png",
+    title: "Pengelolaan Berat Badan",
+    description:
+      "Pertahankan berat badan sehat melalui diet seimbang dan aktivitas fisik teratur.",
+  },
+];
+---
+
+<section class="strategi-modern-section">
+  <h2 class="strategi-modern-title">
+    Langkah atau Strategi Penanganan Diabetes
+  </h2>
+  <p class="strategi-modern-subtitle">
+    Berikut adalah beberapa langkah penting untuk membantu mengelola diabetes
+    secara efektif dan berkelanjutan.
+  </p>
+
+  <div class="strategi-modern-list">
+    {
+      strategiList.map((item) => (
+        <div class="strategi-modern-card fade-in">
+          <div class="strategi-modern-icon">
+            <img src={item.icon} alt={item.title} />
+          </div>
+          <div class="strategi-modern-content">
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .strategi-modern-section {
+    padding: 4rem 1rem;
+    background: #f1f5f9;
+    text-align: center;
+  }
+
+  .strategi-modern-title {
+    color: #2563eb;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .strategi-modern-subtitle {
+    font-size: 1rem;
+    color: #475569;
+    max-width: 700px;
+    margin: 0 auto 2.5rem auto;
+  }
+
+  .strategi-modern-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .strategi-modern-card {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  .strategi-modern-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.08);
+  }
+
+  .strategi-modern-icon img {
+    width: 82px;
+    height: 82px;
+  }
+
+  .strategi-modern-icon {
+    flex-shrink: 0;
+    margin-right: 1.5rem;
+  }
+
+  .strategi-modern-content h3 {
+    font-size: 1.2rem;
+    color: #1f2937;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+    text-align: left;
+  }
+
+  .strategi-modern-content p {
+    font-size: 0.95rem;
+    color: #4b5563;
+    text-align: left;
+    line-height: 1.5;
+  }
+
+  /* Animasi Fade-In */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.8s ease forwards;
+  }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Responsif */
+  @media (max-width: 640px) {
+    .strategi-modern-card {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .strategi-modern-icon {
+      margin-right: 0;
+      margin-bottom: 1rem;
+    }
+
+    .strategi-modern-content h3,
+    .strategi-modern-content p {
+      text-align: center;
+    }
+  }
+</style>

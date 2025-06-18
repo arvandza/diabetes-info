@@ -1,0 +1,118 @@
+---
+import Layout from "../layouts/Layout.astro";
+import DiabetesDefinition from "../components/DiabetesDefinition.astro";
+import DiabetesTypes from "../components/DiabetesTypes.astro";
+import Navbar from "../components/Navbar.astro";
+import Hero from "../components/Hero.astro";
+import FootExerciseCard from "../components/exercise/Exercise.astro";
+import FoodTypes from "../components/food-types/FoodTypesComponent.astro";
+import Symtoms from "../components/symtoms/SymtomsComponent.astro";
+import Prevention from "../components/prevention/PreventionComponent.astro";
+import ControlMedicine from "../components/control-medicine/ControlMedicineComponent.astro";
+
+// Use public folder images (accessible via direct URLs)
+const hospitalImagePath = "/images/Hospital.jpeg";
+const doctorImagePath = "/images/doctor.jpg";
+
+const navItems = [
+  { href: "#home", text: "Home" },
+  { href: "#definition", text: "Definition" },
+  { href: "#types", text: "Types" },
+  { href: "#symptoms", text: "Symptoms" },
+  { href: "#prevention", text: "Prevention" },
+  { href: "#exercise", text: "Exercise" },
+];
+
+const heroButtons = [
+  {
+    text: "Pelajari Lebih",
+    href: "#definition",
+    variant: "primary" as const,
+    icon: "📚",
+  },
+  {
+    text: "Butuh Bantuan?",
+    href: "#symptoms",
+    variant: "secondary" as const,
+    icon: "🏥",
+  },
+];
+
+const PageTitle = "Diabetes Mellitus - Comprehensive Health Information";
+---
+
+<Layout title={PageTitle}>
+  <Navbar brandName="DiabetesInfo" items={navItems} />
+
+  <!-- Hero Section -->
+  <Hero
+    title="Diabetes Mellitus"
+    subtitle="Pencegahan & Penanggulangan Diabetes Mellitus"
+    description="Kenali Diabetes Mellitus: Hidup Sehat, Bebas Komplikasi"
+    backgroundImage={hospitalImagePath}
+    ctaButtons={heroButtons}
+    height="100vh"
+    textAlign="center"
+  />
+
+  <!-- Debug: Check if image path is correct -->
+  <script is:inline define:vars={{ imagePath: hospitalImagePath }}>
+    console.log("Hero background image path:", imagePath);
+    // Test if image is accessible
+    const img = new Image();
+    img.onload = () => console.log("✅ Hero image loaded successfully");
+    img.onerror = () => console.error("❌ Hero image failed to load");
+    img.src = imagePath;
+  </script>
+
+  <!-- Main content sections for testing navigation -->
+  <main id="home">
+    <section
+      id="definition"
+      style="min-height: 50vh; padding: 0; background: #f8f9fa;"
+    >
+      <DiabetesDefinition
+        title="Apa Itu Diabetes Mellitus?"
+        subtitle="Definisi Medis"
+        image={doctorImagePath}
+        imageAlt="Healthcare professional providing diabetes consultation"
+        imageCaption="Professional medical consultation for diabetes care and management"
+        layout="side-by-side"
+      />
+    </section>
+
+    <section id="types" style="min-height: 100vh; padding: 0;">
+      <DiabetesTypes
+        title="Tipe Diabetes Mellitus"
+        subtitle="Kenali Perbedaannya"
+        description="Diabetes melitus mencakup beberapa kondisi yang berbeda, masing-masing dengan karakteristik, penyebab, dan pendekatan pengobatan yang unik. Memahami perbedaan ini sangat penting untuk diagnosis dan pengobatan yang tepat."
+        layout="grid"
+        columns={2}
+        showStatistics={true}
+      />
+    </section>
+
+    <section id="symptoms" style="min-height: 50vh;">
+      <Symtoms />
+    </section>
+
+    <section
+      id="prevention"
+      style="min-height: 20vh; padding: 2rem; background: #f1f5f9;"
+    >
+      <Prevention />
+    </section>
+
+    <section style="min-width: 100%;">
+      <ControlMedicine />
+    </section>
+
+    <section>
+      <FoodTypes />
+    </section>
+
+    <section id="exercise" class="hero">
+      <FootExerciseCard />
+    </section>
+  </main>
+</Layout>

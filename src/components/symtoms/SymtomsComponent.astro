@@ -1,0 +1,149 @@
+---
+const symptoms = [
+  {
+    icon: "/images/thirsty.png",
+    title: "Sering Haus",
+    description: "Rasa haus yang terus-menerus meskipun sudah cukup minum.",
+  },
+  {
+    icon: "/images/pee.png",
+    title: "Sering Buang Air Kecil",
+    description: "Frekuensi buang air kecil meningkat terutama di malam hari.",
+  },
+  {
+    icon: "/images/fatigue.png",
+    title: "Mudah Lelah",
+    description: "Merasa lemas dan tidak bertenaga tanpa sebab jelas.",
+  },
+  {
+    icon: "/images/blurry.png",
+    title: "Penglihatan Kabur",
+    description: "Kesulitan melihat jelas atau pandangan yang kabur.",
+  },
+  {
+    icon: "/images/hungry.png",
+    title: "Sering Lapar",
+    description: "Rasa lapar yang terus-menerus meskipun sudah makan.",
+  },
+  {
+    icon: "/images/wound.png",
+    title: "Luka Sulit Sembuh",
+    description: "Luka yang lambat sembuh menjadi tanda umum diabetes.",
+  },
+  {
+    icon: "/images/tingling.png",
+    title: "Kesemutan",
+    description: "Sering merasa kesemutan di bagian tubuh.",
+  },
+  {
+    icon: "/images/skin.png",
+    title: "Masalah pada Kulit",
+    description: "Kulit kering dan gatal, hingga kondisi kulit yang menghitam.",
+  },
+];
+---
+
+<section class="symptoms-section">
+  <h2 class="symptoms-title">Gejala dari Diabetes</h2>
+  <p class="symptoms-subtitle">
+    Kenali gejala umum diabetes agar dapat ditangani sejak dini
+  </p>
+
+  <div class="symptoms-grid">
+    {
+      symptoms.map((symptom) => (
+        <div class="symptom-card">
+          <img src={symptom.icon} alt={symptom.title} class="symptom-icon" />
+          <h3>{symptom.title}</h3>
+          <p>{symptom.description}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .symptoms-section {
+    padding: 4rem 1rem;
+    background: var(
+      --section-bg,
+      linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)
+    );
+    text-align: center;
+  }
+
+  .symptoms-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #2563eb; /* Biru yang diminta */
+    margin-bottom: 0.5rem;
+  }
+
+  .symptoms-subtitle {
+    color: #475569;
+    font-size: 1rem;
+    margin-bottom: 2.5rem;
+    max-width: 600px;
+    margin-inline: auto;
+  }
+
+  .symptoms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .symptom-card {
+    background: linear-gradient(to bottom right, #ffffff, #f9fbfd);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    border-bottom: 4px solid #2563eb;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+    text-align: center;
+  }
+
+  .symptom-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12);
+  }
+
+  .symptom-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1rem;
+  }
+
+  .symptom-card h3 {
+    font-size: 1.25rem;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  .symptom-card p {
+    font-size: 0.95rem;
+    color: #4b5563;
+    line-height: 1.5;
+  }
+
+  /* Responsiveness tambahan */
+  @media (max-width: 480px) {
+    .symptoms-title {
+      font-size: 1.8rem;
+    }
+
+    .symptom-card {
+      padding: 1.5rem 1rem;
+    }
+
+    .symptom-icon {
+      width: 56px;
+      height: 56px;
+    }
+  }
+</style>

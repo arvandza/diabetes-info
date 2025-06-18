@@ -1,0 +1,311 @@
+---
+// Single Responsibility: Only handles hero content rendering
+interface Props {
+  title: string;
+  subtitle?: string;
+  description?: string;
+  ctaButtons?: Array<{
+    text: string;
+    href: string;
+    variant?: 'primary' | 'secondary' | 'outline';
+    icon?: string;
+  }>;
+  className?: string;
+  textAlign?: 'left' | 'center' | 'right';
+}
+
+const {
+  title,
+  subtitle,
+  description,
+  ctaButtons = [],
+  className = "",
+  textAlign = 'center'
+} = Astro.props;
+---
+
+<div class={`hero-content ${className}`} data-hero-content>
+  <div class="hero-content-inner" style={`text-align: ${textAlign}`}>
+
+    {subtitle && (
+      <p class="hero-subtitle" data-hero-subtitle>
+        {subtitle}
+      </p>
+    )}
+
+    <h1 class="hero-title" data-hero-title>
+      {title}
+    </h1>
+
+    {description && (
+      <p class="hero-description" data-hero-description>
+        {description}
+      </p>
+    )}
+
+    {ctaButtons.length > 0 && (
+      <div class="hero-actions" data-hero-actions>
+        {ctaButtons.map((button, index) => (
+          <a
+            href={button.href}
+            class={`hero-button hero-button--${button.variant || 'primary'}`}
+            data-hero-button={index}
+            role="button"
+            tabindex="0"
+          >
+            {button.icon && (
+              <span class="hero-button-icon" aria-hidden="true">
+                {button.icon}
+              </span>
+            )}
+            <span class="hero-button-text">{button.text}</span>
+          </a>
+        ))}
+      </div>
+    )}
+
+  </div>
+</div>
+
+<style>
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+    padding: var(--hero-content-padding, 2rem 1rem);
+    color: var(--hero-text-color, #ffffff);
+  }
+
+  .hero-content-inner {
+    max-width: var(--hero-content-max-width, 800px);
+    width: 100%;
+    animation: heroContentFadeIn 1s ease-out;
+    padding: 2rem;
+  }
+
+  /* Typography */
+  .hero-subtitle {
+    font-size: var(--hero-subtitle-size, 1.125rem);
+    font-weight: var(--hero-subtitle-weight, 500);
+    color: var(--hero-subtitle-color, #ffffff);
+    margin: 0 0 1rem 0;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    animation: heroSlideUp 0.8s ease-out 0.2s both;
+  }
+
+  .hero-title {
+    font-size: var(--hero-title-size-mobile, 2.5rem);
+    font-weight: var(--hero-title-weight, 700);
+    color: var(--hero-title-color, #ffffff);
+    margin: 0 0 1.5rem 0;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9);
+    animation: heroSlideUp 0.8s ease-out 0.4s both;
+  }
+
+  .hero-description {
+    font-size: var(--hero-description-size, 1.25rem);
+    font-weight: var(--hero-description-weight, 400);
+    color: var(--hero-description-color, #ffffff);
+    margin: 0 0 2rem 0;
+    line-height: 1.6;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    animation: heroSlideUp 0.8s ease-out 0.6s both;
+  }
+
+  /* Actions */
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: heroSlideUp 0.8s ease-out 0.8s both;
+  }
+
+  /* Buttons */
+  .hero-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border-radius: var(--hero-button-radius, 8px);
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--hero-transition, 0.3s ease);
+    cursor: pointer;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-button--primary {
+    background: var(--hero-button-primary-bg, #2563eb);
+    color: var(--hero-button-primary-text, #ffffff);
+    border-color: var(--hero-button-primary-bg, #2563eb);
+  }
+
+  .hero-button--primary:hover {
+    background: var(--hero-button-primary-hover, #1d4ed8);
+    border-color: var(--hero-button-primary-hover, #1d4ed8);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+  }
+
+  .hero-button--secondary {
+    background: var(--hero-button-secondary-bg, rgba(255, 255, 255, 0.1));
+    color: var(--hero-button-secondary-text, #ffffff);
+    border-color: var(--hero-button-secondary-border, rgba(255, 255, 255, 0.3));
+    backdrop-filter: blur(10px);
+  }
+
+  .hero-button--secondary:hover {
+    background: var(--hero-button-secondary-hover, rgba(255, 255, 255, 0.2));
+    border-color: var(--hero-button-secondary-border-hover, rgba(255, 255, 255, 0.5));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+  }
+
+  .hero-button--outline {
+    background: transparent;
+    color: var(--hero-button-outline-text, #ffffff);
+    border-color: var(--hero-button-outline-border, #ffffff);
+  }
+
+  .hero-button--outline:hover {
+    background: var(--hero-button-outline-hover, #ffffff);
+    color: var(--hero-button-outline-text-hover, #2563eb);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+  }
+
+  .hero-button-icon {
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+  }
+
+  .hero-button-text {
+    white-space: nowrap;
+  }
+
+  /* Responsive Design */
+  @media (min-width: 768px) {
+    .hero-content {
+      padding: var(--hero-content-padding-md, 3rem 2rem);
+    }
+
+    .hero-title {
+      font-size: var(--hero-title-size-tablet, 3.5rem);
+    }
+
+    .hero-description {
+      font-size: var(--hero-description-size-md, 1.375rem);
+    }
+
+    .hero-actions {
+      justify-content: center;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero-content {
+      padding: var(--hero-content-padding-lg, 4rem 3rem);
+    }
+
+    .hero-title {
+      font-size: var(--hero-title-size-desktop, 4rem);
+    }
+
+    .hero-description {
+      font-size: var(--hero-description-size-lg, 1.5rem);
+    }
+  }
+
+  /* Animations */
+  @keyframes heroContentFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes heroSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Accessibility */
+  .hero-button:focus {
+    outline: 2px solid var(--hero-focus-color, #ffffff);
+    outline-offset: 2px;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-content-inner,
+    .hero-subtitle,
+    .hero-title,
+    .hero-description,
+    .hero-actions {
+      animation: none;
+    }
+
+    .hero-button {
+      transition: none;
+    }
+
+    .hero-button:hover {
+      transform: none;
+    }
+  }
+
+  /* High contrast mode */
+  @media (prefers-contrast: high) {
+    .hero-title,
+    .hero-subtitle,
+    .hero-description {
+      color: #ffffff;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    .hero-button {
+      border-width: 3px;
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    .hero-content {
+      color: #000000;
+      background: #ffffff;
+    }
+
+    .hero-title,
+    .hero-subtitle,
+    .hero-description {
+      color: #000000;
+    }
+
+    .hero-actions {
+      display: none;
+    }
+  }
+</style>

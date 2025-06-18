@@ -1,0 +1,246 @@
+---
+// @ts-nocheck
+// Import sub-components (Single Responsibility Principle)
+import DefinitionContent from "./definition/DefinitionContent.astro";
+import DefinitionImage from "./definition/DefinitionImage.astro";
+
+// Simplified interface for the definition component
+interface Props {
+  title?: string;
+  subtitle?: string;
+  image?: string;
+  imageAlt?: string;
+  imageCaption?: string;
+  layout?: "side-by-side" | "stacked" | "image-first";
+  className?: string;
+}
+
+const {
+  title = "",
+  subtitle = "",
+  image,
+  imageAlt = "Doctor consulting with diabetes patient",
+  imageCaption = "Healthcare professional providing diabetes consultation and care",
+  layout = "side-by-side",
+  className = "",
+} = Astro.props;
+
+// Comprehensive diabetes definition and information
+const diabetesDefinition = `Diabetes Mellitus adalah kondisi kronis di mana tubuh tidak dapat memproduksi atau menggunakan insulin secara efektif, menyebabkan kadar gula darah (glukosa) meningkat di atas normal. Insulin adalah hormon yang membantu glukosa masuk ke sel untuk diubah menjadi energi.`;
+
+const keyPoints = [
+  "Diabetes Type 1 : Menyebabkan kerusakan Sel Beta Pankreas oleh sistem imun tubuh sendiri. Sehingga menyebabkan insulin berhenti total",
+  "Diabetes Type 2 : Tubuh tidak merespons insulin (resistensi). Sehingga menyebabkan pankreas kelelahan dan produksi insulin menurun",
+];
+
+const statistics = [
+  {
+    label: "Kasus Global",
+    value: "537 Juta",
+    description: "Orang dewasa yang hidup dengan diabetes di seluruh dunia",
+  },
+  {
+    label: "Kematian Tahunan",
+    value: "6,7 Juta",
+    description: "Kematian akibat diabetes pada tahun 2021",
+  },
+  {
+    label: "Biaya Kesehatan",
+    value: "966 Miliar",
+    description: "Pengeluaran kesehatan global terkait diabetes",
+  },
+  {
+    label: "Tidak Terdiagnosis",
+    value: "44,7%",
+    description: "Orang dengan diabetes yang tidak terdiagnosis",
+  },
+];
+---
+
+<section
+  class={`diabetes-definition ${layout} ${className}`}
+  id="definition"
+  data-definition-section
+>
+  <div class="definition-container">
+    <div class="definition-wrapper">
+      <!-- Content Component -->
+      <DefinitionContent
+        title={title}
+        subtitle={subtitle}
+        definition={diabetesDefinition}
+        keyPoints={keyPoints}
+        statistics={statistics}
+      />
+
+      <!-- Image Component -->
+    </div>
+  </div>
+</section>
+
+<style>
+  .diabetes-definition {
+    padding: var(--definition-section-padding, 4rem 0);
+    background: var(--definition-bg, #ffffff);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .definition-container {
+    max-width: var(--definition-max-width, 1200px);
+    margin: 0 auto;
+    padding: 0 var(--definition-container-padding, 1.5rem);
+  }
+
+  .definition-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--definition-gap, 3rem);
+    min-height: 500px;
+  }
+
+  /* Layout Variants */
+  .diabetes-definition.side-by-side .definition-wrapper {
+    flex-direction: row;
+  }
+
+  .diabetes-definition.image-first .definition-wrapper {
+    flex-direction: row-reverse;
+  }
+
+  .diabetes-definition.stacked .definition-wrapper {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  /* CSS Custom Properties for theming */
+  .diabetes-definition {
+    --definition-primary-color: #2563eb;
+    --definition-secondary-color: #1d4ed8;
+    --definition-title-color: #1e293b;
+    --definition-text-color: #4a5568;
+    --definition-border-color: #e2e8f0;
+    --definition-card-bg: #ffffff;
+    --definition-key-point-bg: #f8fafc;
+    --definition-content-padding: 2rem;
+    --definition-content-padding-mobile: 1.5rem;
+    --definition-content-padding-desktop: 3rem;
+    --definition-image-padding: 1rem;
+    --definition-image-padding-mobile: 0.5rem;
+    --definition-image-padding-desktop: 2rem;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .diabetes-definition {
+      padding: var(--definition-section-padding-mobile, 2rem 0);
+    }
+
+    .definition-container {
+      padding: 0 var(--definition-container-padding-mobile, 1rem);
+    }
+
+    .definition-wrapper {
+      flex-direction: column;
+      gap: var(--definition-gap-mobile, 2rem);
+      min-height: auto;
+    }
+
+    /* Override layout on mobile - always stack */
+    .diabetes-definition.side-by-side .definition-wrapper,
+    .diabetes-definition.image-first .definition-wrapper {
+      flex-direction: column;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .diabetes-definition {
+      padding: var(--definition-section-padding-tablet, 3rem 0);
+    }
+
+    .definition-wrapper {
+      gap: var(--definition-gap-tablet, 2.5rem);
+    }
+  }
+
+  @media (min-width: 1025px) {
+    .diabetes-definition {
+      padding: var(--definition-section-padding-desktop, 5rem 0);
+    }
+
+    .definition-wrapper {
+      gap: var(--definition-gap-desktop, 4rem);
+    }
+  }
+
+  /* Background decoration */
+  .diabetes-definition::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      rgba(37, 99, 235, 0.02) 0%,
+      rgba(59, 130, 246, 0.01) 50%,
+      rgba(37, 99, 235, 0.02) 100%
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .definition-container {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .diabetes-definition * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  /* High contrast mode */
+  @media (prefers-contrast: high) {
+    .diabetes-definition {
+      --definition-border-color: #000000;
+      --definition-text-color: #000000;
+      border-top: 3px solid #000000;
+      border-bottom: 3px solid #000000;
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    .diabetes-definition {
+      padding: 1rem 0;
+      background: #ffffff !important;
+      page-break-inside: avoid;
+    }
+
+    .diabetes-definition::before {
+      display: none;
+    }
+
+    .definition-wrapper {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+
+  /* Dark mode support (if implemented) */
+  @media (prefers-color-scheme: dark) {
+    .diabetes-definition {
+      --definition-bg: #1e293b;
+      --definition-title-color: #f1f5f9;
+      --definition-text-color: #cbd5e1;
+      --definition-card-bg: #334155;
+      --definition-key-point-bg: #475569;
+      --definition-border-color: #475569;
+    }
+  }
+</style>

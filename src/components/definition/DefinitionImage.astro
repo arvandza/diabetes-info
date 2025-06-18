@@ -1,0 +1,331 @@
+---
+// Single Responsibility: Only handles definition image rendering
+interface Props {
+  image?: string;
+  alt: string;
+  caption?: string;
+  className?: string;
+  imagePosition?: "left" | "right" | "top" | "bottom";
+  showOverlay?: boolean;
+  overlayContent?: string;
+}
+
+const {
+  image,
+  alt,
+  caption,
+  className = "",
+  showOverlay = false,
+  overlayContent,
+} = Astro.props;
+
+// Generate unique ID for SVG gradient to avoid conflicts
+const uniqueId = `doctorGradient-${Math.random().toString(36).substring(2, 11)}`;
+
+// Fallback doctor/patient illustration if no image provided
+const fallbackSvg = `
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="${uniqueId}" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="300" fill="#f8fafc"/>
+
+  <!-- Doctor figure -->
+  <g transform="translate(100, 50)">
+    <!-- Head -->
+    <circle cx="100" cy="40" r="25" fill="#fbbf24"/>
+
+    <!-- Body -->
+    <rect x="85" y="65" width="30" height="50" fill="url(#${uniqueId})" rx="5"/>
+
+    <!-- White coat -->
+    <rect x="80" y="70" width="40" height="45" fill="#ffffff" rx="5" opacity="0.9"/>
+
+    <!-- Stethoscope -->
+    <path d="M90 75 Q95 70 100 75 Q105 70 110 75" stroke="#374151" stroke-width="2" fill="none"/>
+    <circle cx="100" cy="85" r="3" fill="#374151"/>
+
+    <!-- Arms -->
+    <rect x="70" y="75" width="15" height="25" fill="#fbbf24" rx="7"/>
+    <rect x="115" y="75" width="15" height="25" fill="#fbbf24" rx="7"/>
+
+    <!-- Legs -->
+    <rect x="90" y="115" width="8" height="30" fill="#1f2937" rx="4"/>
+    <rect x="102" y="115" width="8" height="30" fill="#1f2937" rx="4"/>
+
+    <!-- Medical chart -->
+    <rect x="135" y="80" width="20" height="25" fill="#ffffff" stroke="#d1d5db" stroke-width="1" rx="2"/>
+    <line x1="140" y1="85" x2="150" y2="85" stroke="#6b7280" stroke-width="1"/>
+    <line x1="140" y1="90" x2="150" y2="90" stroke="#6b7280" stroke-width="1"/>
+    <line x1="140" y1="95" x2="150" y2="95" stroke="#6b7280" stroke-width="1"/>
+  </g>
+
+  <!-- Medical cross -->
+  <g transform="translate(300, 80)">
+    <rect x="0" y="10" width="30" height="10" fill="#ef4444" rx="2"/>
+    <rect x="10" y="0" width="10" height="30" fill="#ef4444" rx="2"/>
+  </g>
+
+  <!-- Decorative elements -->
+  <circle cx="50" cy="80" r="3" fill="#3b82f6" opacity="0.3"/>
+  <circle cx="350" cy="200" r="4" fill="#10b981" opacity="0.3"/>
+  <circle cx="30" cy="200" r="2" fill="#f59e0b" opacity="0.3"/>
+</svg>
+`;
+---
+
+<div class={`definition-image ${className}`} data-definition-image>
+  <div class="image-container">
+    {
+      image ? (
+        <img
+          src={image}
+          alt={alt}
+          class="definition-img"
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <div class="fallback-image" set:html={fallbackSvg} />
+      )
+    }
+
+    {
+      showOverlay && overlayContent && (
+        <div class="image-overlay">
+          <div class="overlay-content">{overlayContent}</div>
+        </div>
+      )
+    }
+  </div>
+
+  {caption && <p class="image-caption">{caption}</p>}
+</div>
+
+<style>
+  .definition-image {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--definition-image-padding, 1rem);
+  }
+
+  .image-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  .image-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  .definition-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    aspect-ratio: 4/3;
+  }
+
+  .fallback-image {
+    width: 100%;
+    height: auto;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4/3;
+  }
+
+  .fallback-image svg {
+    width: 100%;
+    height: 100%;
+    max-width: 400px;
+    max-height: 300px;
+  }
+
+  .image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(37, 99, 235, 0.8) 0%,
+      rgba(59, 130, 246, 0.6) 100%
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .image-container:hover .image-overlay {
+    opacity: 1;
+  }
+
+  .overlay-content {
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .image-caption {
+    margin-top: 1rem;
+    color: var(--definition-text-color, #6b7280);
+    font-size: 0.875rem;
+    text-align: center;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .definition-image {
+      padding: var(--definition-image-padding-mobile, 0.5rem);
+      margin-bottom: 2rem;
+    }
+
+    .image-container {
+      max-width: 100%;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .definition-image {
+      padding: var(--definition-image-padding-desktop, 2rem);
+    }
+
+    .image-container {
+      max-width: 450px;
+    }
+  }
+
+  /* Loading state */
+  .definition-img[data-loading="true"] {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .definition-img[data-loaded="true"] {
+    opacity: 1;
+  }
+
+  /* Error state */
+  .image-container[data-error="true"] {
+    background: #fee2e2;
+    border: 2px dashed #fca5a5;
+  }
+
+  .image-container[data-error="true"]::after {
+    content: "🖼️ Image not available";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #dc2626;
+    font-size: 0.875rem;
+    text-align: center;
+  }
+
+  /* Accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .image-container {
+      transition: none;
+    }
+
+    .image-container:hover {
+      transform: none;
+    }
+
+    .image-overlay {
+      transition: none;
+    }
+  }
+
+  /* High contrast mode */
+  @media (prefers-contrast: high) {
+    .image-container {
+      border: 3px solid #000;
+    }
+
+    .image-overlay {
+      background: rgba(0, 0, 0, 0.8);
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    .image-container {
+      box-shadow: none;
+      border: 1px solid #000;
+    }
+
+    .image-overlay {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Image loading and error handling
+  function initializeDefinitionImage() {
+    const imageElements = document.querySelectorAll(
+      "[data-definition-image] .definition-img"
+    ) as NodeListOf<HTMLImageElement>;
+
+    imageElements.forEach((img) => {
+      const container = img.closest(".image-container") as HTMLElement;
+
+      if (!container) return;
+
+      // Set loading state
+      img.setAttribute("data-loading", "true");
+
+      // Handle image load
+      img.addEventListener("load", () => {
+        img.setAttribute("data-loaded", "true");
+        img.removeAttribute("data-loading");
+      });
+
+      // Handle image error
+      img.addEventListener("error", () => {
+        console.warn("Definition image failed to load");
+        container.setAttribute("data-error", "true");
+        img.removeAttribute("data-loading");
+      });
+
+      // Preload image if not already loaded
+      if (!img.complete && img.src) {
+        const preloadImage = new Image();
+        preloadImage.src = img.src;
+      }
+    });
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeDefinitionImage);
+  } else {
+    initializeDefinitionImage();
+  }
+</script>

@@ -1,0 +1,549 @@
+---
+// Import sub-components (Single Responsibility Principle)
+import DiabetesTypesGrid from "../components/diabetes-types/DiabetesTypesGrid.astro";
+
+// Simplified interface for the main diabetes types component
+interface Props {
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  layout?: "grid" | "masonry" | "carousel";
+  columns?: number;
+  className?: string;
+  showStatistics?: boolean;
+}
+
+const {
+  title = "Types of Diabetes Mellitus",
+  subtitle = "Understanding Different Forms",
+  description = "Diabetes mellitus encompasses several distinct conditions, each with unique characteristics, causes, and treatment approaches. Understanding these differences is crucial for proper diagnosis and treatment.",
+  layout = "grid",
+  columns = 2,
+  className = "",
+  showStatistics = true,
+} = Astro.props;
+
+// Global diabetes statistics
+const globalStats = [
+  {
+    number: "537M",
+    label: "Adults with Diabetes",
+    description: "Worldwide in 2021",
+    color: "#dc2626",
+  },
+  {
+    number: "90-95%",
+    label: "Type 2 Diabetes",
+    description: "Of all diabetes cases",
+    color: "#2563eb",
+  },
+  {
+    number: "5-10%",
+    label: "Type 1 Diabetes",
+    description: "Of all diabetes cases",
+    color: "#7c3aed",
+  },
+  {
+    number: "783M",
+    label: "Projected by 2045",
+    description: "Global diabetes cases",
+    color: "#f59e0b",
+  },
+];
+---
+
+<section
+  class={`diabetes-types-main ${className}`}
+  id="diabetes-types"
+  data-diabetes-types-section
+>
+  <!-- Background decoration -->
+  <div class="section-background" aria-hidden="true"></div>
+
+  <div class="section-container">
+    <!-- Section Introduction -->
+    <div class="section-intro">
+      <div class="intro-content">
+        {subtitle && <p class="intro-subtitle">{subtitle}</p>}
+        <h2 class="intro-title">{title}</h2>
+        {description && <p class="intro-description">{description}</p>}
+      </div>
+    </div>
+
+    <!-- Global Statistics (if enabled) -->
+
+    <!-- Diabetes Types Grid -->
+    <DiabetesTypesGrid
+      title=""
+      subtitle=""
+      description=""
+      layout={layout}
+      columns={columns}
+    />
+
+    <!-- Call to Action -->
+    <div class="cta-section">
+      <div class="cta-content">
+        <h3 class="cta-title">Need Professional Guidance?</h3>
+        <p class="cta-description">
+          Consult with healthcare professionals for accurate diagnosis,
+          personalized treatment plans, and ongoing diabetes management support.
+        </p>
+        <div class="cta-actions">
+          <button class="cta-primary">
+            Find a Doctor
+            <span class="cta-icon" aria-hidden="true">👨‍⚕️</span>
+          </button>
+          <button class="cta-secondary">
+            Get Resources
+            <span class="cta-icon" aria-hidden="true">📚</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .diabetes-types-main {
+    position: relative;
+    background: var(
+      --section-bg,
+      linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)
+    );
+    overflow: hidden;
+  }
+
+  .section-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at 20% 20%,
+        rgba(37, 99, 235, 0.05) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 80%,
+        rgba(124, 58, 237, 0.05) 0%,
+        transparent 50%
+      );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .section-container {
+    position: relative;
+    z-index: 1;
+    max-width: var(--section-max-width, 1200px);
+    margin: 0 auto;
+    padding: var(--section-padding, 4rem 1.5rem);
+  }
+
+  /* Section Introduction */
+  .section-intro {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .intro-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .intro-subtitle {
+    color: var(--primary-color, #2563eb);
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .intro-title {
+    color: var(--title-color, #1e293b);
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 0 1.5rem 0;
+    background: linear-gradient(135deg, #1e293b 0%, #2563eb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .intro-description {
+    color: var(--text-color, #4a5568);
+    font-size: 1.125rem;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* Statistics Section */
+  .statistics-section {
+    margin-bottom: 4rem;
+  }
+
+  .statistics-title {
+    color: var(--title-color, #1e293b);
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    margin: 0 0 2rem 0;
+  }
+
+  .statistics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--stat-color, #2563eb);
+  }
+
+  .stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    border-color: var(--stat-color, #2563eb);
+  }
+
+  .stat-number {
+    color: var(--stat-color, #2563eb);
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    color: var(--title-color, #1e293b);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-description {
+    color: var(--text-muted, #6b7280);
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  /* Call to Action */
+  .cta-section {
+    margin-top: 4rem;
+    background: var(--cta-bg, #ffffff);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(37, 99, 235, 0.02) 0%,
+      rgba(124, 58, 237, 0.02) 100%
+    );
+    pointer-events: none;
+  }
+
+  .cta-content {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .cta-title {
+    color: var(--title-color, #1e293b);
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0 0 1rem 0;
+  }
+
+  .cta-description {
+    color: var(--text-color, #4a5568);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 2rem 0;
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cta-primary,
+  .cta-secondary {
+    padding: 0.875rem 2rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+  }
+
+  .cta-primary {
+    background: var(--primary-color, #2563eb);
+    color: white;
+  }
+
+  .cta-secondary {
+    background: transparent;
+    color: var(--primary-color, #2563eb);
+    border: 2px solid var(--primary-color, #2563eb);
+  }
+
+  .cta-primary:hover {
+    background: var(--primary-color-dark, #1d4ed8);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+  }
+
+  .cta-secondary:hover {
+    background: var(--primary-color, #2563eb);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .section-container {
+      padding: var(--section-padding-mobile, 2rem 1rem);
+    }
+
+    .section-intro {
+      margin-bottom: 2rem;
+    }
+
+    .intro-title {
+      font-size: 2rem;
+    }
+
+    .intro-description {
+      font-size: 1rem;
+    }
+
+    .statistics-section {
+      margin-bottom: 2rem;
+    }
+
+    .statistics-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .stat-card {
+      padding: 1.5rem 1rem;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+    }
+
+    .cta-section {
+      margin-top: 2rem;
+      padding: 2rem 1.5rem;
+    }
+
+    .cta-title {
+      font-size: 1.5rem;
+    }
+
+    .cta-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .cta-primary,
+    .cta-secondary {
+      width: 100%;
+      max-width: 250px;
+      justify-content: center;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    .intro-title {
+      font-size: 3.5rem;
+    }
+
+    .statistics-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* Accessibility */
+  .cta-primary:focus,
+  .cta-secondary:focus {
+    outline: 2px solid var(--primary-color, #2563eb);
+    outline-offset: 2px;
+  }
+
+  /* High contrast mode */
+  @media (prefers-contrast: high) {
+    .stat-card,
+    .cta-section {
+      border-width: 2px;
+    }
+
+    .intro-title {
+      -webkit-text-fill-color: var(--title-color, #1e293b);
+      background: none;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .stat-card,
+    .cta-primary,
+    .cta-secondary {
+      transition: none;
+    }
+
+    .stat-card:hover,
+    .cta-primary:hover,
+    .cta-secondary:hover {
+      transform: none;
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    .diabetes-types-main {
+      background: #ffffff !important;
+    }
+
+    .section-background {
+      display: none;
+    }
+
+    .cta-actions {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Diabetes types interaction handling with proper TypeScript types
+  function initializeDiabetesTypes(): void {
+    // Handle learn more buttons
+    const learnMoreButtons = document.querySelectorAll(
+      "[data-type]"
+    ) as NodeListOf<HTMLElement>;
+
+    learnMoreButtons.forEach((button: HTMLElement) => {
+      button.addEventListener("click", (e: MouseEvent) => {
+        e.preventDefault();
+
+        // Use currentTarget which is guaranteed to be the button element
+        const currentButton = e.currentTarget as HTMLElement;
+        const diabetesType = currentButton.getAttribute("data-type");
+        console.log(`Learn more about: ${diabetesType}`);
+
+        // Here you could implement modal opening, navigation, etc.
+        // For now, we'll just scroll to the top of the card
+        const card = currentButton.closest(
+          ".diabetes-type-card"
+        ) as HTMLElement | null;
+        if (card) {
+          card.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      });
+    });
+
+    // Handle CTA buttons
+    const ctaButtons = document.querySelectorAll(
+      ".cta-primary, .cta-secondary"
+    ) as NodeListOf<HTMLElement>;
+
+    ctaButtons.forEach((button: HTMLElement) => {
+      button.addEventListener("click", (e: MouseEvent) => {
+        e.preventDefault();
+
+        // Use currentTarget which is guaranteed to be the button element
+        const currentButton = e.currentTarget as HTMLElement;
+        const buttonText = currentButton.textContent?.trim() || "";
+        console.log(`CTA clicked: ${buttonText}`);
+
+        // Add visual feedback
+        currentButton.style.transform = "scale(0.95)";
+        setTimeout(() => {
+          currentButton.style.transform = "";
+        }, 150);
+      });
+    });
+
+    // Intersection Observer for animations
+    const observerOptions: IntersectionObserverInit = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px",
+    };
+
+    const observer = new IntersectionObserver(
+      (entries: IntersectionObserverEntry[]) => {
+        entries.forEach((entry: IntersectionObserverEntry) => {
+          if (entry.isIntersecting) {
+            const target = entry.target as HTMLElement;
+            target.style.opacity = "1";
+            target.style.transform = "translateY(0)";
+          }
+        });
+      },
+      observerOptions
+    );
+
+    // Observe stat cards for staggered animation
+    const statCards = document.querySelectorAll(
+      ".stat-card"
+    ) as NodeListOf<HTMLElement>;
+    statCards.forEach((card: HTMLElement, index: number) => {
+      card.style.opacity = "0";
+      card.style.transform = "translateY(20px)";
+      card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+      observer.observe(card);
+    });
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeDiabetesTypes);
+  } else {
+    initializeDiabetesTypes();
+  }
+</script>

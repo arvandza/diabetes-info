@@ -1,0 +1,39 @@
+/* ========== LAYOUT UTILITIES ========== */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.flex {
+  display: flex;
+  gap: 1rem;
+}
+
+/* ========== SPACING UTILITIES ========== */
+.px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+.py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+
+.mb-8 { margin-bottom: 2rem; }
+.mt-12 { margin-top: 3rem; }
+
+/* ========== TYPOGRAPHY UTILITIES ========== */
+.text-center { text-align: center; }
+.text-primary { color: #0984e3; }
+.text-lg { font-size: 1.125rem; }
+
+/* ========== RESPONSIVE UTILITIES ========== */
+@media (min-width: 768px) {
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .md\:text-left {
+    text-align: left;
+  }
+}
