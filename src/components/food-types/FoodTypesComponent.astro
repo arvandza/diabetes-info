@@ -17,11 +17,39 @@
       />
       <h3>Makanan yang Dianjurkan</h3>
       <p class="desc">Makanan yang membantu mengontrol kadar gula darah:</p>
-      <ul>
-        <li>✅ Karbohidrat (Beras Merah, Oatmeal)</li>
-        <li>✅ Protein Hewani (Ikan, Putih Telur)</li>
-        <li>✅ Protein Nabati (Tempe, Tahu, Kacang Hijau)</li>
-        <li>✅ Sayuran (Daun Kacang, Mentimun, Tomat)</li>
+
+      <button
+        class="dropdown-toggle"
+        aria-expanded="false"
+        aria-controls="list-dianjurkan"
+      >
+        <span>Lihat Daftar</span>
+        <svg
+          class="arrow"
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </button>
+
+      <ul class="makanan-list" id="list-dianjurkan">
+        <li data-tooltip="Kaya serat, rendah gula">
+          ✅ Karbohidrat (Beras Merah, Oatmeal)
+        </li>
+        <li data-tooltip="Sumber protein rendah lemak">
+          ✅ Protein Hewani (Ikan, Putih Telur)
+        </li>
+        <li data-tooltip="Alternatif protein nabati">
+          ✅ Protein Nabati (Tempe, Tahu, Kacang Hijau)
+        </li>
+        <li data-tooltip="Rendah karbohidrat, tinggi vitamin">
+          ✅ Sayuran (Daun Kacang, Mentimun, Tomat)
+        </li>
       </ul>
     </div>
 
@@ -36,11 +64,37 @@
       <p class="desc">
         Makanan yang dapat meningkatkan kadar gula darah secara drastis:
       </p>
-      <ul>
-        <li>❌ Mengandung Kolesterol (Jeroan, Otak)</li>
-        <li>❌ Makanan Cepat Saji (Junk Food)</li>
-        <li>❌ Makanan Manis (Gula, Madu, Sirup, Jelly, Kue)</li>
-        <li>❌ Mengandung Pengawet (Ikan Asin, Telur Asin)</li>
+      <button
+        class="dropdown-toggle"
+        aria-expanded="false"
+        aria-controls="list-tidak-dianjurkan"
+      >
+        <span>Lihat Daftar</span>
+        <svg
+          class="arrow"
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </button>
+      <ul class="makanan-list" id="list-tidak-dianjurkan">
+        <li data-tooltip="Tinggi lemak jenuh">
+          ❌ Mengandung Kolesterol (Jeroan, Otak)
+        </li>
+        <li data-tooltip="Tinggi kalori dan lemak trans">
+          ❌ Makanan Cepat Saji (Junk Food)
+        </li>
+        <li data-tooltip="Meningkatkan gula darah cepat">
+          ❌ Makanan Manis (Gula, Madu, Sirup, Jelly, Kue)
+        </li>
+        <li data-tooltip="Tinggi garam dan bahan kimia">
+          ❌ Mengandung Pengawet (Ikan Asin, Telur Asin)
+        </li>
       </ul>
     </div>
   </div>
@@ -83,21 +137,22 @@
     max-width: 400px;
     text-align: left;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-    transition: transform 0.3s ease;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
   }
 
   .makanan-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
   }
 
   .makanan-image {
-    width: 50%;
-    height: 30%;
+    width: 100%;
+    height: 200px;
     object-fit: cover;
-    margin-bottom: 2rem;
-    display: block; /* Membuat elemen menjadi block untuk margin auto berfungsi */
-    margin-left: auto; /* Menengahkan secara horizontal */
-    margin-right: auto;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
   }
 
   .makanan-card h3 {
@@ -109,18 +164,99 @@
   .makanan-card .desc {
     font-size: 0.95rem;
     color: #4b5563;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
   }
 
-  .makanan-card ul {
-    list-style-type: none;
+  .dropdown-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background: linear-gradient(90deg, #2563eb, #3b82f6);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition:
+      background 0.3s ease,
+      transform 0.2s ease;
   }
 
-  .makanan-card li {
-    margin-bottom: 0.5rem;
+  .dropdown-toggle:hover {
+    background: linear-gradient(90deg, #1e3a8a, #2563eb);
+    transform: translateY(-2px);
+  }
+
+  .dropdown-toggle:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  }
+
+  .dropdown-toggle .arrow {
+    transition: transform 0.3s ease;
+  }
+
+  .dropdown-toggle.open .arrow {
+    transform: rotate(180deg);
+  }
+
+  .makanan-list {
+    font-weight: 600;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition:
+      max-height 0.5s ease,
+      opacity 0.3s ease,
+      transform 0.3s ease;
+
+    list-style: none;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 0.5rem;
+  }
+
+  .makanan-list.show {
+    max-height: 500px;
+    opacity: 1;
+    transform: translateY(0);
+    padding: 1rem;
+  }
+
+  .makanan-list li {
     font-size: 0.95rem;
     color: #374151;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
     position: relative;
+  }
+
+  .makanan-list li:hover {
+    background: #e5e7eb;
+    transform: translateX(5px);
+  }
+
+  .makanan-list li[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f2937;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    z-index: 10;
   }
 
   .dianjurkan {
@@ -136,5 +272,81 @@
       flex-direction: column;
       align-items: center;
     }
+
+    .makanan-image {
+      height: 150px;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+    }
+
+    .dropdown-toggle {
+      font-size: 0.9rem;
+      padding: 10px 12px;
+    }
+
+    .makanan-list li {
+      font-size: 0.9rem;
+      padding: 6px 10px;
+    }
   }
 </style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const toggles = document.querySelectorAll(".dropdown-toggle");
+
+    toggles.forEach((toggle) => {
+      toggle.addEventListener("click", () => {
+        const list = toggle.nextElementSibling; // Target ul.makanan-list
+        const isExpanded = list.classList.contains("show");
+
+        // Tutup semua dropdown lain
+        document.querySelectorAll(".makanan-list.show").forEach((otherList) => {
+          if (otherList !== list) {
+            otherList.classList.remove("show");
+            otherList.previousElementSibling.classList.remove("open");
+            otherList.previousElementSibling.setAttribute(
+              "aria-expanded",
+              "false"
+            );
+            otherList.previousElementSibling.querySelector("span").textContent =
+              "Lihat Daftar";
+          }
+        });
+
+        // Toggle dropdown saat ini
+        list.classList.toggle("show");
+        toggle.classList.toggle("open");
+        toggle.setAttribute("aria-expanded", !isExpanded);
+        toggle.querySelector("span").textContent = isExpanded
+          ? "Lihat Daftar"
+          : "Sembunyikan Daftar";
+      });
+    });
+
+    // Tutup dropdown saat klik di luar
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".makanan-card")) {
+        document.querySelectorAll(".makanan-list.show").forEach((list) => {
+          list.classList.remove("show");
+          list.previousElementSibling.classList.remove("open");
+          list.previousElementSibling.setAttribute("aria-expanded", "false");
+          list.previousElementSibling.querySelector("span").textContent =
+            "Lihat Daftar";
+        });
+      }
+    });
+
+    // Dukungan navigasi keyboard
+    toggles.forEach((toggle) => {
+      toggle.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggle.click();
+        }
+      });
+    });
+  });
+</script>

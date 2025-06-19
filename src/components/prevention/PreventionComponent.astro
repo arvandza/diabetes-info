@@ -4,19 +4,35 @@ const strategiList = [
     icon: "/images/diet.png",
     title: "Diet Sehat",
     description:
-      "Fokus pada biji-bijian utuh, protein rendah lemak, buah-buahan, dan sayuran. Batasi makanan olahan dan minuman manis.",
+      "✔ Fokus pada biji-bijian utuh, protein rendah lemak, buah-buahan, dan sayuran. Batasi makanan olahan dan minuman manis.",
+    details: [
+      "✔ Konsumsi 5 porsi sayuran dan buah setiap hari.",
+      "✔ Pilih karbohidrat kompleks seperti quinoa atau beras merah.",
+      "✔ Hindari minuman berkalori tinggi seperti soda.",
+    ],
   },
   {
     icon: "/images/exercise.png",
     title: "Olahraga Teratur",
     description:
       "Targetkan setidaknya 150 menit aktivitas aerobik intensitas sedang per minggu.",
+    details: [
+      "✔ Jangan melakukan olahraga bila kadar gula darah mencapai 200 gr/dl",
+      "✔ Makan atau minum karbohidrat ekstra bila gula darah kurang dari 100 gr/dl",
+      "✔ Melakukan Olahraga Pagi (Jam 06.00-08.00) dengan durasi 25-45 Menit (Jogging, Renang, Senam)",
+      "✔ Melakukan Olahraga Sore (Jam 16.00-18.00) dengan durasi 25-45 Menit (Jogging, Renang)",
+    ],
   },
   {
     icon: "/images/weight.png",
     title: "Pengelolaan Berat Badan",
     description:
       "Pertahankan berat badan sehat melalui diet seimbang dan aktivitas fisik teratur.",
+    details: [
+      "✔ Pantau asupan kalori harian Anda.",
+      "✔ Tetapkan target penurunan berat badan 0.5-1 kg per minggu.",
+      "✔ Konsultasikan dengan ahli gizi untuk rencana personal.",
+    ],
   },
 ];
 ---
@@ -35,14 +51,40 @@ const strategiList = [
 
   <div class="strategi-modern-list">
     {
-      strategiList.map((item) => (
+      strategiList.map((item, index) => (
         <div class="strategi-modern-card fade-in">
           <div class="strategi-modern-icon">
             <img src={item.icon} alt={item.title} />
           </div>
           <div class="strategi-modern-content">
-            <h3>{item.title}</h3>
+            <div class="strategi-header">
+              <h3>{item.title}</h3>
+              <button
+                class="strategi-dropdown-btn"
+                aria-expanded="false"
+                aria-controls={`dropdown-${index}`}
+              >
+                <svg
+                  class="arrow"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+            </div>
             <p>{item.description}</p>
+            <div class="strategi-dropdown-content" id={`dropdown-${index}`}>
+              <ul>
+                {item.details.map((detail, i) => (
+                  <li key={i}>{detail}</li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       ))
@@ -81,7 +123,7 @@ const strategiList = [
 
   .strategi-modern-card {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     background: #ffffff;
     border-radius: 12px;
     padding: 1.5rem;
@@ -106,19 +148,86 @@ const strategiList = [
     margin-right: 1.5rem;
   }
 
+  .strategi-modern-content {
+    flex: 1;
+    text-align: left;
+  }
+
+  .strategi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.4rem;
+  }
+
   .strategi-modern-content h3 {
     font-size: 1.2rem;
     color: #1f2937;
-    margin-bottom: 0.4rem;
     font-weight: 600;
-    text-align: left;
   }
 
   .strategi-modern-content p {
     font-size: 0.95rem;
     color: #4b5563;
-    text-align: left;
     line-height: 1.5;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Dropdown Styles */
+  .strategi-dropdown-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition:
+      border-color 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .strategi-dropdown-btn:hover {
+    border-color: #1e40af;
+    transform: rotate(90deg);
+  }
+
+  .arrow {
+    color: #2563eb;
+    transition: transform 0.3s ease;
+  }
+
+  .strategi-dropdown-btn[aria-expanded="true"] .arrow {
+    transform: rotate(180deg);
+  }
+
+  .strategi-dropdown-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+
+  .strategi-dropdown-content.show {
+    max-height: 200px; /* Sesuaikan dengan kebutuhan */
+  }
+
+  .strategi-dropdown-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0 0;
+  }
+
+  .strategi-dropdown-content li {
+    font-size: 0.9rem;
+    color: #4b5563;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .strategi-dropdown-content li:last-child {
+    border-bottom: none;
   }
 
   /* Animasi Fade-In */
@@ -127,6 +236,7 @@ const strategiList = [
     transform: translateY(30px);
     animation: fadeInUp 0.8s ease forwards;
   }
+
   .strategi-notif-btn {
     background-color: #2563eb;
     color: #ffffff;
@@ -163,6 +273,16 @@ const strategiList = [
       margin-bottom: 1rem;
     }
 
+    .strategi-modern-content {
+      text-align: center;
+    }
+
+    .strategi-header {
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
     .strategi-modern-content h3,
     .strategi-modern-content p {
       text-align: center;
@@ -173,23 +293,66 @@ const strategiList = [
 <script>
   if (typeof window !== "undefined") {
     document.addEventListener("DOMContentLoaded", () => {
+      // Notification Button
       const btn = document.getElementById("notifTrigger");
-
       if (btn && "Notification" in window) {
         btn.addEventListener("click", async (e) => {
           e.preventDefault();
           const permission = await Notification.requestPermission();
-
           if (permission === "granted") {
             new Notification("Notifikasi Aktif!", {
               body: "Anda akan diingatkan untuk menjaga pola hidup sehat!",
-              icon: "/icons/notif-icon.png", // opsional
+              icon: "/icons/notif-icon.png",
             });
           } else {
             alert("Notifikasi tidak diizinkan.");
           }
         });
       }
+
+      // Dropdown Toggle
+      const dropdownButtons = document.querySelectorAll(
+        ".strategi-dropdown-btn"
+      );
+      dropdownButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const dropdownContent =
+            button.parentElement.nextElementSibling.nextElementSibling;
+          const isExpanded = button.getAttribute("aria-expanded") === "true";
+
+          // Close all other dropdowns
+          document
+            .querySelectorAll(".strategi-dropdown-content.show")
+            .forEach((content) => {
+              if (content !== dropdownContent) {
+                content.classList.remove("show");
+                const otherButton = content.parentElement.querySelector(
+                  ".strategi-dropdown-btn"
+                );
+                otherButton.setAttribute("aria-expanded", "false");
+              }
+            });
+
+          // Toggle current dropdown
+          dropdownContent.classList.toggle("show");
+          button.setAttribute("aria-expanded", !isExpanded);
+        });
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest(".strategi-modern-content")) {
+          document
+            .querySelectorAll(".strategi-dropdown-content.show")
+            .forEach((content) => {
+              content.classList.remove("show");
+              const button = content.parentElement.querySelector(
+                ".strategi-dropdown-btn"
+              );
+              button.setAttribute("aria-expanded", "false");
+            });
+        }
+      });
     });
   }
 </script>
