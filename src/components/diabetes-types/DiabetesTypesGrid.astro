@@ -49,7 +49,7 @@ const diabetesTypes = [
     type: "Diabetes Tipe 2",
     title: "Diabetes Tipe 2",
     description:
-      "Bentuk diabetes yang paling umum, ditandai dengan resistensi insulin dan kekurangan insulin relatif.",
+      "Bentuk diabetes yang paling umum, ditandai dengan resistensi insulin dan kekurangan insulin relatif, sering dikaitkan dengan faktor gaya hidup seperti obesitas.",
     characteristics: [
       "Resistensi insulin pada sel otot, lemak, dan hati",
       "Penurunan fungsi pankreas secara bertahap",
@@ -149,7 +149,7 @@ const diabetesTypes = [
     type: "Diabetes Sekunder",
     title: "Diabetes Sekunder",
     description:
-      "Diabetes yang berkembang akibat kondisi medis lain atau pengobatan yang memengaruhi pankreas atau aksi insulin.",
+      "Diabetes yang berkembang akibat kondisi medis lain atau pengobatan yang memengaruhi pankreas atau aksi insulin, biasanya memerlukan pemantauan ketat untuk mencegah.",
     characteristics: [
       "Disebabkan oleh kondisi medis lain",
       "Dapat diakibatkan oleh obat-obatan atau perawatan",
@@ -208,35 +208,13 @@ const diabetesTypes = [
   </div>
 
   <!-- Additional Information -->
-  <div class="section-footer">
-    <div class="footer-content">
-      <p class="footer-note">
-        <strong>Penting:</strong> Informasi ini hanya untuk tujuan edukasi. Selalu
-        konsultasikan dengan tenaga kesehatan untuk diagnosis dan perawatan yang
-        tepat.
-      </p>
-      <div class="footer-actions">
-        <button class="consultation-btn">
-          Jadwal Konsultasi
-          <span class="btn-icon" aria-hidden="true">📅</span>
-        </button>
-        <button class="resources-btn">
-          Unduh Sumber Daya
-          <span class="btn-icon" aria-hidden="true">📄</span>
-        </button>
-      </div>
-    </div>
-  </div>
 </section>
 
 <style>
   .diabetes-types-section {
-    padding: var(--section-padding, 4rem 0);
+    padding: var(--section-padding, 1rem 0);
     position: relative;
-    max-width: var(
-      --section-max-width,
-      1200px
-    ); /* Ensure section has a max-width */
+    max-width: var(1500px, 1200px); /* Ensure section has a max-width */
     margin: 0 auto; /* Center the entire section */
   }
 
@@ -280,19 +258,12 @@ const diabetesTypes = [
 
   /* Types Grid */
   .types-grid {
-    max-width: var(--section-max-width, 1200px); /* Match section max-width */
-    margin: 0 auto; /* Center the grid horizontally */
-    padding: 0 var(--section-padding-x, 1.5rem);
-    display: grid;
-    gap: var(--grid-gap, 2rem);
-    justify-content: center; /* Center grid items within the grid */
-  }
-
-  .types-grid--grid {
-    grid-template-columns: repeat(
-      auto-fit,
-      minmax(350px, 1fr)
-    ); /* Flexible columns */
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
   }
 
   .types-grid--masonry {

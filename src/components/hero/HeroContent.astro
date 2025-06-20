@@ -7,11 +7,11 @@ interface Props {
   ctaButtons?: Array<{
     text: string;
     href: string;
-    variant?: 'primary' | 'secondary' | 'outline';
+    variant?: "primary" | "secondary" | "outline";
     icon?: string;
   }>;
   className?: string;
-  textAlign?: 'left' | 'center' | 'right';
+  textAlign?: "left" | "center" | "right";
 }
 
 const {
@@ -20,50 +20,86 @@ const {
   description,
   ctaButtons = [],
   className = "",
-  textAlign = 'center'
+  textAlign = "center",
 } = Astro.props;
 ---
 
 <div class={`hero-content ${className}`} data-hero-content>
   <div class="hero-content-inner" style={`text-align: ${textAlign}`}>
-
-    {subtitle && (
-      <p class="hero-subtitle" data-hero-subtitle>
-        {subtitle}
-      </p>
-    )}
+    {
+      subtitle && (
+        <p class="hero-subtitle" data-hero-subtitle>
+          {subtitle}
+        </p>
+      )
+    }
 
     <h1 class="hero-title" data-hero-title>
       {title}
     </h1>
 
-    {description && (
-      <p class="hero-description" data-hero-description>
-        {description}
-      </p>
-    )}
+    {
+      description && (
+        <p class="hero-description" data-hero-description>
+          {description}
+        </p>
+      )
+    }
 
-    {ctaButtons.length > 0 && (
-      <div class="hero-actions" data-hero-actions>
-        {ctaButtons.map((button, index) => (
-          <a
-            href={button.href}
-            class={`hero-button hero-button--${button.variant || 'primary'}`}
-            data-hero-button={index}
-            role="button"
-            tabindex="0"
+    <div class="hero-actions" data-hero-actions>
+      <a
+        href="/images/pedoman-diabetes.pdf"
+        class="hero-button hero-button--primary"
+        download
+        ,"
+      >
+        <span class="hero-button-text">📚 Pelajari Lebih</span>
+      </a>
+
+      <a
+        id="openHelpBtn"
+        class="hero-button hero-button--secondary"
+        role="button"
+        tabindex="0"
+      >
+        <span class="hero-button-text">🏥 Butuh Bantuan?</span>
+      </a>
+    </div>
+
+    <div
+      id="helpModal"
+      class="modal-overlay hidden"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="modal-wrapper">
+        <div class="modal-header">
+          <h3 class="modal-title"></h3>
+          <button id="closeHelpBtn" class="modal-close" aria-label="Tutup Modal"
+            >✕</button
           >
-            {button.icon && (
-              <span class="hero-button-icon" aria-hidden="true">
-                {button.icon}
-              </span>
-            )}
-            <span class="hero-button-text">{button.text}</span>
-          </a>
-        ))}
+        </div>
+        <div class="modal-body">
+          <h3>Berikut layanan yang tersedia untuk Anda:</h3>
+          <ul class="modal-list">
+            <li>
+              <strong>📞 Emergency Call Surabaya:</strong><br />
+              <a href="tel:112" class="modal-link">112</a>
+            </li>
+            <li>
+              <strong>💬 Konsultasi Diabetes:</strong><br />
+              <a
+                href="https://wa.me/6285785937579"
+                class="modal-link"
+                target="_blank"
+              >
+                085785937579 (WhatsApp)
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
-    )}
-
+    </div>
   </div>
 </div>
 
@@ -170,7 +206,10 @@ const {
 
   .hero-button--secondary:hover {
     background: var(--hero-button-secondary-hover, rgba(255, 255, 255, 0.2));
-    border-color: var(--hero-button-secondary-border-hover, rgba(255, 255, 255, 0.5));
+    border-color: var(
+      --hero-button-secondary-border-hover,
+      rgba(255, 255, 255, 0.5)
+    );
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
   }
@@ -197,6 +236,128 @@ const {
   .hero-button-text {
     white-space: nowrap;
   }
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5); /* background semi transparan */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 1rem;
+  }
+
+  .modal-overlay.hidden {
+    display: none;
+  }
+
+  /* Modal Box */
+  .modal-wrapper {
+    background: #fff;
+    border-radius: 16px;
+    max-width: 500px;
+    width: 100%;
+    padding: 2rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    position: relative;
+  }
+
+  /* Header */
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+  }
+
+  .modal-close {
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    color: #6b7280;
+  }
+
+  .modal-close:hover {
+    color: #ef4444;
+  }
+
+  /* Body */
+  .modal-body {
+    font-size: 1rem;
+    color: #334155;
+    line-height: 1.6;
+  }
+
+  .modal-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 1rem;
+  }
+
+  .modal-list li {
+    margin-bottom: 1rem;
+  }
+
+  .modal-link {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .modal-link:hover {
+    text-decoration: underline;
+  }
+
+  /* Footer */
+  .modal-footer {
+    margin-top: 1.5rem;
+    text-align: right;
+  }
+
+  .modal-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .modal-btn:hover {
+    background: #1d4ed8;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
 
   /* Responsive Design */
   @media (min-width: 768px) {
@@ -215,6 +376,14 @@ const {
     .hero-actions {
       justify-content: center;
     }
+
+    .modal-wrapper {
+      padding: 1.5rem;
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+    }
   }
 
   @media (min-width: 1024px) {
@@ -228,6 +397,44 @@ const {
 
     .hero-description {
       font-size: var(--hero-description-size-lg, 1.5rem);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .modal-wrapper {
+      padding: 1.25rem;
+      border-radius: 12px;
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+      text-align: center;
+    }
+
+    .modal-body {
+      font-size: 0.95rem;
+    }
+
+    .modal-list li {
+      font-size: 0.95rem;
+    }
+
+    .modal-btn {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+    }
+
+    .modal-close {
+      font-size: 1rem;
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+    }
+
+    .modal-footer {
+      text-align: center;
+      margin-top: 1.5rem;
     }
   }
 
@@ -309,3 +516,32 @@ const {
     }
   }
 </style>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const openBtn = document.getElementById("openHelpBtn");
+    const closeBtn = document.getElementById("closeHelpBtn");
+    const closeBtnFooter = document.getElementById("closeHelpBtnFooter");
+    const modal = document.getElementById("helpModal");
+
+    function openModal() {
+      modal.classList.remove("hidden");
+    }
+
+    function closeModal() {
+      modal.classList.add("hidden");
+    }
+
+    openBtn?.addEventListener("click", function (e) {
+      e.preventDefault();
+      openModal();
+    });
+
+    closeBtn?.addEventListener("click", closeModal);
+    closeBtnFooter?.addEventListener("click", closeModal);
+
+    // Esc key to close modal
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeModal();
+    });
+  });
+</script>

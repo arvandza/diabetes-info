@@ -1,6 +1,6 @@
 ---
 // Import sub-components (Single Responsibility Principle)
-import HeroContent from './hero/HeroContent.astro';
+import HeroContent from "./hero/HeroContent.astro";
 
 // Simplified interface without complex types
 interface Props {
@@ -12,11 +12,11 @@ interface Props {
   ctaButtons?: Array<{
     text: string;
     href: string;
-    variant?: 'primary' | 'secondary' | 'outline';
+    variant?: "primary" | "secondary" | "outline";
     icon?: string;
   }>;
   height?: string;
-  textAlign?: 'left' | 'center' | 'right';
+  textAlign?: "left" | "center" | "right";
 }
 
 // Default configuration (simplified)
@@ -25,68 +25,70 @@ const defaultConfig = {
     breakpoints: {
       mobile: 768,
       tablet: 1024,
-      desktop: 1200
-    }
+      desktop: 1200,
+    },
   },
   animation: {
     enabled: true,
     duration: 800,
     delay: 200,
-    easing: 'ease-out'
+    easing: "ease-out",
   },
   accessibility: {
     enableReducedMotion: true,
     ariaLabels: {
-      hero: 'Hero section',
-      background: 'Hero background image'
-    }
-  }
+      hero: "Hero section",
+      background: "Hero background image",
+    },
+  },
 };
 
 const defaultTheme = {
   colors: {
-    primary: '#2563eb',
-    secondary: '#1d4ed8',
-    text: '#ffffff',
-    textLight: 'rgba(255, 255, 255, 0.95)',
-    overlay: 'linear-gradient(135deg, rgba(37, 99, 235, 0.85), rgba(59, 130, 246, 0.75))',
-    accent: '#3b82f6'
+    primary: "#2563eb",
+    secondary: "#1d4ed8",
+    text: "#ffffff",
+    textLight: "rgba(255, 255, 255, 0.95)",
+    overlay:
+      "linear-gradient(135deg, rgba(37, 99, 235, 0.85), rgba(59, 130, 246, 0.75))",
+    accent: "#3b82f6",
   },
   typography: {
     titleSize: {
-      mobile: '2.5rem',
-      tablet: '3.5rem',
-      desktop: '4rem'
+      mobile: "2.5rem",
+      tablet: "3.5rem",
+      desktop: "4rem",
     },
     subtitleSize: {
-      mobile: '1rem',
-      tablet: '1.125rem',
-      desktop: '1.25rem'
+      mobile: "1rem",
+      tablet: "1.125rem",
+      desktop: "1.25rem",
     },
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    fontFamily:
+      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     fontWeight: {
-      title: '700',
-      subtitle: '500',
-      description: '400'
-    }
+      title: "700",
+      subtitle: "500",
+      description: "400",
+    },
   },
   spacing: {
     padding: {
-      mobile: '2rem 1rem',
-      tablet: '3rem 2rem',
-      desktop: '4rem 3rem'
+      mobile: "2rem 1rem",
+      tablet: "3rem 2rem",
+      desktop: "4rem 3rem",
     },
     margin: {
-      mobile: '0',
-      tablet: '0',
-      desktop: '0'
-    }
+      mobile: "0",
+      tablet: "0",
+      desktop: "0",
+    },
   },
   effects: {
-    borderRadius: '0',
-    boxShadow: 'none',
-    transition: '0.3s ease'
-  }
+    borderRadius: "0",
+    boxShadow: "none",
+    transition: "0.3s ease",
+  },
 };
 
 const {
@@ -97,7 +99,7 @@ const {
   className = "",
   ctaButtons = [],
   height = "100vh",
-  textAlign = 'center'
+  textAlign = "center",
 } = Astro.props;
 
 const finalConfig = defaultConfig;
@@ -138,32 +140,45 @@ const finalTheme = defaultTheme;
   <!-- Background Component -->
   <!-- Debug: backgroundImage value -->
   <script is:inline define:vars={{ bgImage: backgroundImage }}>
-    console.log('🔍 Hero backgroundImage prop:', bgImage);
-    console.log('🔍 backgroundImage truthy?', !!bgImage);
-    console.log('🔍 backgroundImage type:', typeof bgImage);
+    console.log("🔍 Hero backgroundImage prop:", bgImage);
+    console.log("🔍 backgroundImage truthy?", !!bgImage);
+    console.log("🔍 backgroundImage type:", typeof bgImage);
   </script>
 
   <!-- Hero Background - Robust Solution -->
-  <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;">
+  <div
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"
+  >
     <!-- Always show gradient background first -->
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%); z-index: 1;"></div>
+    <div
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%); z-index: 1;"
+    >
+    </div>
 
     <!-- Medical pattern overlay -->
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 2px, transparent 2px), radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 2px, transparent 2px); background-size: 50px 50px; z-index: 2;"></div>
+    <div
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 2px, transparent 2px), radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 2px, transparent 2px); background-size: 50px 50px; z-index: 2;"
+    >
+    </div>
 
     <!-- Optional image overlay if available -->
-    {backgroundImage && (
-      <img
-        src={backgroundImage}
-        alt="Hospital background"
-        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.3; z-index: 3;"
-        onload="console.log('✅ Hero image loaded as overlay')"
-        onerror="console.log('ℹ️ Hero image not available, using gradient background')"
-      />
-    )}
+    {
+      backgroundImage && (
+        <img
+          src={backgroundImage}
+          alt="Hospital background"
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.3; z-index: 3;"
+          onload="console.log('✅ Hero image loaded as overlay')"
+          onerror="console.log('ℹ️ Hero image not available, using gradient background')"
+        />
+      )
+    }
 
     <!-- Text readability overlay -->
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2); z-index: 4;"></div>
+    <div
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2); z-index: 4;"
+    >
+    </div>
   </div>
 
   <!-- Content Component -->
@@ -186,7 +201,10 @@ const finalTheme = defaultTheme;
     justify-content: center;
     overflow: hidden;
     font-family: var(--hero-font-family);
-    background: var(--hero-fallback-bg, linear-gradient(135deg, #f3f4f6, #e5e7eb));
+    background: var(
+      --hero-fallback-bg,
+      linear-gradient(135deg, #f3f4f6, #e5e7eb)
+    );
   }
 
   /* Responsive height adjustments */
@@ -270,7 +288,7 @@ const finalTheme = defaultTheme;
     function init() {
       if (isInitialized) return;
 
-      const heroElement = document.querySelector('[data-hero]') as HTMLElement;
+      const heroElement = document.querySelector("[data-hero]") as HTMLElement;
       if (!heroElement) return;
 
       setupResponsiveHandling(heroElement);
@@ -292,55 +310,67 @@ const finalTheme = defaultTheme;
         }, 150);
       }
 
-      window.addEventListener('resize', handleResize);
+      window.addEventListener("resize", handleResize);
       updateResponsiveStyles(heroElement);
     }
 
     // Update styles based on viewport
     function updateResponsiveStyles(heroElement: HTMLElement) {
       const width = window.innerWidth;
-      const mobileBreakpoint = parseInt(getComputedStyle(heroElement).getPropertyValue('--hero-mobile-breakpoint')) || 768;
-      const tabletBreakpoint = parseInt(getComputedStyle(heroElement).getPropertyValue('--hero-tablet-breakpoint')) || 1024;
+      const mobileBreakpoint =
+        parseInt(
+          getComputedStyle(heroElement).getPropertyValue(
+            "--hero-mobile-breakpoint"
+          )
+        ) || 768;
+      const tabletBreakpoint =
+        parseInt(
+          getComputedStyle(heroElement).getPropertyValue(
+            "--hero-tablet-breakpoint"
+          )
+        ) || 1024;
 
       if (width < mobileBreakpoint) {
-        heroElement.setAttribute('data-breakpoint', 'mobile');
+        heroElement.setAttribute("data-breakpoint", "mobile");
       } else if (width < tabletBreakpoint) {
-        heroElement.setAttribute('data-breakpoint', 'tablet');
+        heroElement.setAttribute("data-breakpoint", "tablet");
       } else {
-        heroElement.setAttribute('data-breakpoint', 'desktop');
+        heroElement.setAttribute("data-breakpoint", "desktop");
       }
     }
 
     // Setup accessibility features
     function setupAccessibility(heroElement: HTMLElement) {
       // Handle reduced motion preference
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        heroElement.setAttribute('data-reduced-motion', 'true');
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        heroElement.setAttribute("data-reduced-motion", "true");
       }
 
       // Handle high contrast preference
-      if (window.matchMedia('(prefers-contrast: high)').matches) {
-        heroElement.setAttribute('data-high-contrast', 'true');
+      if (window.matchMedia("(prefers-contrast: high)").matches) {
+        heroElement.setAttribute("data-high-contrast", "true");
       }
     }
 
     // Handle image loading
     function setupImageLoading(heroElement: HTMLElement) {
-      const backgroundImage = heroElement.querySelector('[data-hero-image]') as HTMLImageElement;
+      const backgroundImage = heroElement.querySelector(
+        "[data-hero-image]"
+      ) as HTMLImageElement;
 
       if (!backgroundImage) return;
 
-      heroElement.setAttribute('data-loading', 'true');
+      heroElement.setAttribute("data-loading", "true");
 
-      backgroundImage.addEventListener('load', () => {
-        heroElement.setAttribute('data-loaded', 'true');
-        heroElement.removeAttribute('data-loading');
+      backgroundImage.addEventListener("load", () => {
+        heroElement.setAttribute("data-loaded", "true");
+        heroElement.removeAttribute("data-loading");
       });
 
-      backgroundImage.addEventListener('error', () => {
-        heroElement.setAttribute('data-error', 'true');
-        heroElement.removeAttribute('data-loading');
-        console.warn('Hero background image failed to load');
+      backgroundImage.addEventListener("error", () => {
+        heroElement.setAttribute("data-error", "true");
+        heroElement.removeAttribute("data-loading");
+        console.warn("Hero background image failed to load");
       });
     }
 
@@ -356,12 +386,12 @@ const finalTheme = defaultTheme;
   }
 
   // Initialize when DOM is ready
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener("DOMContentLoaded", () => {
     const heroController = createHeroController();
     heroController.init();
 
     // Cleanup on page unload
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener("beforeunload", () => {
       heroController.destroy();
     });
   });

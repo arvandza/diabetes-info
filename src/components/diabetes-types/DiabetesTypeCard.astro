@@ -63,92 +63,123 @@ const {
     <!-- Description -->
     <p class="card-description">{description}</p>
 
-    <!-- Key Information -->
-    <div class="card-info-grid">
+    <!-- Detailed Content (Initially Hidden) -->
+    <div class="detailed-content">
+      <!-- Key Information -->
+      <div class="card-info-grid">
+        {
+          prevalence && (
+            <div class="info-item">
+              <span class="info-label">Prevalensi</span>
+              <span class="info-value">{prevalence}</span>
+            </div>
+          )
+        }
+        {
+          ageGroup && (
+            <div class="info-item">
+              <span class="info-label">Terjadi Pada</span>
+              <span class="info-value">{ageGroup}</span>
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Characteristics -->
       {
-        prevalence && (
-          <div class="info-item">
-            <span class="info-label">Prevalensi</span>
-            <span class="info-value">{prevalence}</span>
+        characteristics.length > 0 && (
+          <div class="characteristics">
+            <h4 class="characteristics-title">Karakteristik:</h4>
+            <ul class="characteristics-list">
+              {characteristics.map((characteristic: string) => (
+                <li class="characteristic-item">
+                  <span class="characteristic-bullet" aria-hidden="true">
+                    •
+                  </span>
+                  <span class="characteristic-text">{characteristic}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         )
       }
+
+      <!-- Causes -->
       {
-        ageGroup && (
-          <div class="info-item">
-            <span class="info-label">Terjadi Pada</span>
-            <span class="info-value">{ageGroup}</span>
+        causes.length > 0 && (
+          <div class="causes">
+            <h4 class="causes-title">Penyebab Utama:</h4>
+            <ul class="causes-list">
+              {causes.map((cause: string) => (
+                <li class="cause-item">
+                  <span class="cause-bullet" aria-hidden="true">
+                    ⚡
+                  </span>
+                  <span class="cause-text">{cause}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
+      <!-- Treatment -->
+      {
+        treatment.length > 0 && (
+          <div class="treatment">
+            <h4 class="treatment-title">Pendekatan Pengobatan:</h4>
+            <ul class="treatment-list">
+              {treatment.map((treatmentItem: string) => (
+                <li class="treatment-item">
+                  <span class="treatment-bullet" aria-hidden="true">
+                    ✓
+                  </span>
+                  <span class="treatment-text">{treatmentItem}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         )
       }
     </div>
-
-    <!-- Characteristics -->
-    {
-      characteristics.length > 0 && (
-        <div class="characteristics">
-          <h4 class="characteristics-title">karakteristik:</h4>
-          <ul class="characteristics-list">
-            {characteristics.map((characteristic: string) => (
-              <li class="characteristic-item">
-                <span class="characteristic-bullet" aria-hidden="true">
-                  •
-                </span>
-                <span class="characteristic-text">{characteristic}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )
-    }
-
-    <!-- Causes -->
-    {
-      causes.length > 0 && (
-        <div class="causes">
-          <h4 class="causes-title">Penyebab Utama:</h4>
-          <ul class="causes-list">
-            {causes.map((cause: string) => (
-              <li class="cause-item">
-                <span class="cause-bullet" aria-hidden="true">
-                  ⚡
-                </span>
-                <span class="cause-text">{cause}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )
-    }
-
-    <!-- Treatment -->
-    {
-      treatment.length > 0 && (
-        <div class="treatment">
-          <h4 class="treatment-title">Pendekatan Pengobatan:</h4>
-          <ul class="treatment-list">
-            {treatment.map((treatmentItem: string) => (
-              <li class="treatment-item">
-                <span class="treatment-bullet" aria-hidden="true">
-                  ✓
-                </span>
-                <span class="treatment-text">{treatmentItem}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )
-    }
   </div>
 
   <!-- Card Footer -->
   <div class="card-footer">
     <button class="learn-more-btn" data-type={type}>
-      Learn More
+      <span class="btn-text">Pelajari Lebih</span>
       <span class="btn-arrow" aria-hidden="true">→</span>
     </button>
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.body.addEventListener("click", function (e) {
+      const button = e.target.closest(".learn-more-btn");
+      if (!button) return;
+
+      const card = button.closest(".diabetes-type-card");
+      const isExpanded = card.classList.contains("is-expanded");
+
+      // Tutup semua card lainnya yang tidak terkait dengan card yang ditekan
+      document.querySelectorAll(".diabetes-type-card").forEach((el) => {
+        if (el !== card && el.classList.contains("is-expanded")) {
+          el.classList.remove("is-expanded");
+          const btnText = el.querySelector(".learn-more-btn .btn-text");
+          if (btnText) btnText.textContent = "Pelajari Lebih";
+        }
+      });
+
+      // Perluas atau tutup card yang ditekan
+      card.classList.toggle("is-expanded", !isExpanded);
+      const btnText = button.querySelector(".btn-text");
+      btnText.textContent = !isExpanded
+        ? "Tampilkan Lebih Sedikit"
+        : "Pelajari Lebih";
+    });
+  });
+</script>
 
 <style>
   .diabetes-type-card {
@@ -164,6 +195,8 @@ const {
     min-width: 400px;
     display: flex;
     flex-direction: column;
+    flex: 0 0 calc(33.333% - 1.5rem); /* 3 kolom dengan gap */
+    box-sizing: border-box;
   }
 
   .diabetes-type-card:hover {
@@ -250,6 +283,20 @@ const {
     margin: 0;
   }
 
+  .detailed-content {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition:
+      max-height 0.4s ease,
+      opacity 0.3s ease;
+  }
+
+  .diabetes-type-card.is-expanded .detailed-content {
+    max-height: 1000px; /* pastikan ini cukup besar untuk konten */
+    opacity: 1;
+  }
+
   /* Info Grid */
   .card-info-grid {
     display: grid;
@@ -285,7 +332,7 @@ const {
   .characteristics,
   .causes,
   .treatment {
-    margin-top: auto;
+    margin-top: 1.5rem;
   }
 
   .characteristics-title,
@@ -378,6 +425,7 @@ const {
   @media (max-width: 768px) {
     .diabetes-type-card {
       padding: var(--card-padding-mobile, 1rem);
+      min-width: 100%;
     }
 
     .card-header {
@@ -424,7 +472,8 @@ const {
   @media (prefers-reduced-motion: reduce) {
     .diabetes-type-card,
     .type-image,
-    .learn-more-btn {
+    .learn-more-btn,
+    .detailed-content {
       transition: none;
     }
 
@@ -447,6 +496,11 @@ const {
 
     .learn-more-btn {
       display: none;
+    }
+
+    .detailed-content {
+      max-height: none !important;
+      opacity: 1 !important;
     }
   }
 </style>

@@ -15,7 +15,7 @@ const hospitalImagePath = "/images/Hospital.jpeg";
 const doctorImagePath = "/images/doctor.jpg";
 
 const navItems = [
-  { href: "#home", text: "Beranda" },
+  { href: "#beranda", text: "Beranda" },
   { href: "#definition", text: "Definisi" },
   { href: "#types", text: "Jenis" },
   { href: "#symptoms", text: "Gejala" },
@@ -26,15 +26,17 @@ const navItems = [
 const heroButtons = [
   {
     text: "Pelajari Lebih",
-    href: "#definition",
+    href: "/files/panduan-diabetes.pdf",
     variant: "primary" as const,
     icon: "📚",
+    download: true,
   },
   {
     text: "Butuh Bantuan?",
-    href: "#symptoms",
+    href: "#",
     variant: "secondary" as const,
     icon: "🏥",
+    onclick: "openHelpModal()",
   },
 ];
 
@@ -45,15 +47,17 @@ const PageTitle = "Diabetes Mellitus - Comprehensive Health Information";
   <Navbar brandName="DiabetesInfo" items={navItems} />
 
   <!-- Hero Section -->
-  <Hero
-    title="Diabetes Mellitus"
-    subtitle="Pencegahan & Penanggulangan Diabetes Mellitus"
-    description="Kenali Diabetes Mellitus: Hidup Sehat, Bebas Komplikasi"
-    backgroundImage={hospitalImagePath}
-    ctaButtons={heroButtons}
-    height="100vh"
-    textAlign="center"
-  />
+  <section id="beranda">
+    <Hero
+      title="Diabetes Mellitus"
+      subtitle="Pencegahan & Penanggulangan Diabetes Mellitus"
+      description="Kenali Diabetes Mellitus: Hidup Sehat, Bebas Komplikasi"
+      backgroundImage={hospitalImagePath}
+      ctaButtons={heroButtons}
+      height="100vh"
+      textAlign="center"
+    />
+  </section>
 
   <!-- Debug: Check if image path is correct -->
   <script is:inline define:vars={{ imagePath: hospitalImagePath }}>
@@ -66,7 +70,7 @@ const PageTitle = "Diabetes Mellitus - Comprehensive Health Information";
   </script>
 
   <!-- Main content sections for testing navigation -->
-  <main id="home">
+  <main>
     <section
       id="definition"
       style="min-height: 50vh; padding: 0; background: #f8f9fa;"
